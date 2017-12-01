@@ -113,6 +113,17 @@ void CodeGen::visitSWhile(SWhile *swhile)
     code.at(patchloc) = code.pos() - (patchloc - 1);
 }
 
+void CodeGen::visitSIf(SIf *sif)
+{
+    sif->exp_->accept(this);
+    code.add(I_JR_IF_FALSE);  // Jump past the body.
+    code.add(0);
+    int patchloc = code.pos() - 1;
+
+    sif->stm_->accept(this); // Body.
+    code.at(patchloc) = code.pos() - (patchloc - 1);
+}
+
 void CodeGen::visitSReturn(SReturn *sreturn)
 {
     // Could avoid the I_SWAP later if we generate code for the
