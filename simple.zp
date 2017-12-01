@@ -5,7 +5,7 @@ int main ()
 {
 int sum;
 int i;
-sum = 2016;
+sum = getnum();
 i = 1;
 sum = sum + i;
 putn (sum);
