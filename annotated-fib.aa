@@ -1,0 +1,236 @@
+0001 Prog varlen:0 addr:4       # program with zero global variables
+0004 Jmp to:53                  # Skip over standard library
+
+######## "Standard library"
+# Implementation of puts
+0006 I_Variable lev:0 disp:-1
+0009 I_Value
+0010 I_Constant value:51198     # address of temporary global "variable"
+0012 Swap
+0013 I_Assign  words:1
+0015 I_Constant value:51198
+0017 I_Value
+0018 I_Constant value:51198
+0020 I_Value
+0021 I_Value
+0022 I_Constant value:51198
+0024 Swap
+0025 I_Assign  words:1
+0027 I_Constant value:51198
+0029 I_Value
+0030 I_Constant value:51198
+0032 I_Value
+0033 Jr_if_False to:9
+0035 C_Write chars:1
+0037 I_Constant value:1
+0039 I_Add
+0040 Jr by:-30
+0042 EndPProc args:1
+
+# Implementation of putn
+0044 I_Variable lev:0 disp:-1
+0047 I_Value
+0048 I_Write words:1
+0050 EndPProc args:1
+
+# Implementation of exit
+0052 EndProg
+
+# Beginning of program proper: call main
+0053 Call lev:0 addr:97
+0056 EndProg
+
+
+######## Code for million function
+0057 Proc varlen:0 addr:60
+0060 I_Variable lev:0 disp:-1  # Address of first parameter
+0063 I_Value                   # Value of first parameter
+0064 I_Constant value:1000000
+0066 I_Multiply                # Calculates value to return
+0067 I_Variable lev:0 disp:-2  # Address of return value
+0070 Swap                      # assign wants the value above the address
+0071 I_Assign  words:1         # Store return value
+0073 EndPProc args:1           # return, popping one parameter
+0075 EndPProc args:1           # dead code --- fix this!
+
+
+######## Code for mx function
+0077 Proc varlen:0 addr:80
+0080 I_Constant value:0
+0082 I_Constant value:5
+0084 Call lev:1 addr:57
+0087 I_Variable lev:0 disp:-1
+0090 Swap
+0091 I_Assign  words:1
+0093 EndPProc args:0
+0095 EndPProc args:0             # dead code --- fix this!
+
+# Code for main function
+0097 Proc varlen:2 addr:100
+0100 I_Constant value:0          # Space for return value
+0102 I_Constant value:307        # Address of "Fib...."
+0104 Call lev:1 addr:6           # call puts
+0107 Jr_if_True by:2             # pop its (unused) return value
+0109 I_Constant value:0
+0111 I_Constant value:326        # Address of "Up to "
+0113 Call lev:1 addr:6           # call puts
+0116 Jr_if_True by:2
+0118 I_Constant value:0
+0120 I_Constant value:0
+0122 Call lev:1 addr:77          # call mx
+0125 Call lev:1 addr:44          # call putn (on the result of mx)
+0128 Jr_if_True by:2
+0130 I_Constant value:0
+0132 I_Constant value:333        # Address of "\n"
+0134 Call lev:1 addr:6           # call puts
+0137 Jr_if_True by:2
+
+# Assignment: lo = 1
+0139 I_Variable lev:0 disp:3     # address of lo
+# duplicate address, so it is on the stack twice
+ 0142 I_Constant value:51198
+ 0144 Swap
+ 0145 I_Assign  words:1           # (*51198) = &lo
+ 0147 I_Constant value:51198
+ 0149 I_Value
+ 0150 I_Constant value:51198
+ 0152 I_Value
+# end duplicate address
+0153 I_Constant value:1          # value to assign
+0155 I_Assign  words:1           # assign 1 to lo's address
+0157 I_Value                     # get the value of lo
+0158 Jr_if_True by:2             # discard the value (from visitSExpr)
+
+# Assignment: hi = lo
+0160 I_Variable lev:0 disp:4
+0163 I_Constant value:51198
+0165 Swap
+0166 I_Assign  words:1
+0168 I_Constant value:51198
+0170 I_Value
+0171 I_Constant value:51198
+0173 I_Value
+0174 I_Variable lev:0 disp:3
+0177 I_Value
+0178 I_Assign  words:1
+0180 I_Value
+0181 Jr_if_True by:2
+
+0183 I_Constant value:0
+0185 I_Variable lev:0 disp:3     # address of lo
+0188 I_Value                     # value of lo
+0189 Call lev:1 addr:44          # call putn
+0192 Jr_if_True by:2
+0194 I_Constant value:0
+0196 I_Variable lev:0 disp:4     # address of hi
+0199 I_Value                     # value of hi
+0200 Call lev:1 addr:44          # call putn
+0203 Jr_if_True by:2
+0205 I_Constant value:0
+0207 I_Constant value:335        # address of "------\n"
+0209 Call lev:1 addr:6           # call puts
+0212 Jr_if_True by:2
+
+# Beginning of while loop
+0214 I_Variable lev:0 disp:4
+0217 I_Value                     # value of hi
+0218 I_Constant value:0          # space for mx's return value
+0220 Call lev:1 addr:77          # call mx
+0223 I_Less                      # hi < mx()
+0224 Jr_if_False to:71           # go to end of loop if false
+# Body of loop
+0226 I_Constant value:0
+0228 I_Variable lev:0 disp:4
+0231 I_Value                     # value of hi
+0232 Call lev:1 addr:44          # call putn
+0235 Jr_if_True by:2             # discard putn's return value
+
+# Assign hi = lo + hi
+0237 I_Variable lev:0 disp:4
+0240 I_Constant value:51198
+0242 Swap
+0243 I_Assign  words:1
+0245 I_Constant value:51198
+0247 I_Value
+0248 I_Constant value:51198
+0250 I_Value
+0251 I_Variable lev:0 disp:3
+0254 I_Value
+0255 I_Variable lev:0 disp:4
+0258 I_Value
+0259 I_Add
+0260 I_Assign  words:1
+0262 I_Value
+0263 Jr_if_True by:2
+
+# Assign lo = hi - lo
+0265 I_Variable lev:0 disp:3
+0268 I_Constant value:51198
+0270 Swap
+0271 I_Assign  words:1
+0273 I_Constant value:51198
+0275 I_Value
+0276 I_Constant value:51198
+0278 I_Value
+0279 I_Variable lev:0 disp:4
+0282 I_Value
+0283 I_Variable lev:0 disp:3
+0286 I_Value
+0287 I_Subtract
+0288 I_Assign  words:1
+0290 I_Value
+0291 Jr_if_True by:2
+
+0293 Jr by:-79                # Jump to beginning of loop
+# End of while loop
+
+0295 I_Constant value:0
+0297 I_Variable lev:0 disp:-1 # address of return value
+0300 Swap
+0301 I_Assign  words:1        # Store 0 as the return value
+0303 EndPProc args:0
+0305 EndPProc args:0          # dead code --- fix this!
+
+# String data "Fibonacci numbers\n\0"
+0307 DATA 70
+0308 DATA 105
+0309 DATA 98
+0310 DATA 111
+0311 DATA 110
+0312 DATA 97
+0313 DATA 99
+0314 DATA 99
+0315 DATA 105
+0316 DATA 32
+0317 DATA 110
+0318 DATA 117
+0319 DATA 109
+0320 DATA 98
+0321 DATA 101
+0322 DATA 114
+0323 DATA 115
+0324 EndProg                     # actually '\n', DATA 10
+0325 DATA 0
+
+# String data "Up to \0"
+0326 DATA 85
+0327 DATA 112
+0328 DATA 32
+0329 DATA 116
+0330 DATA 111
+0331 DATA 32
+0332 DATA 0
+
+# String data "\n\0"
+0333 EndProg                     # actually '\n', DATA 10
+0334 DATA 0
+
+# String data "------\n"
+0335 R_Less                      # actually '-', DATA 45
+0336 R_Less
+0337 R_Less
+0338 R_Less
+0339 R_Less
+0340 R_Less
+0341 EndProg                     # actually '\n', DATA 10
+0342 DATA 0

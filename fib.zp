@@ -1,0 +1,32 @@
+int million(int n)
+{
+  return n * 1000000;
+}
+
+int mx()
+{
+  return million(5);
+}
+
+int main () 
+{
+  puts("Fibonacci numbers\n");
+  puts("Up to ");
+  putn(mx());
+  puts("\n");
+
+  int lo; 
+  int hi;
+  lo = 1;
+  hi = lo;
+  putn(lo);
+  putn(hi);
+  puts("------\n");
+
+  while (hi < mx()) {
+    putn(hi);
+    hi = lo + hi;
+    lo = hi - lo;
+  }
+  return 0;
+}

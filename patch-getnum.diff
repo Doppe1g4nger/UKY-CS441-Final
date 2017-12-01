@@ -1,0 +1,20 @@
+--- pstcode.cc	2017-11-29 22:46:39.823144118 -0500
++++ pstcode-getnum.cc	2017-11-30 00:43:05.398421474 -0500
+@@ -79,6 +79,17 @@
+ 	add(I_ENDPPROC);
+ 	add(1);
+ 
++
++        // getnum() function added (11/28) 
++        fvsyms.insert(Symbol("getnum", TY_FUNC, pos(), 0));
++        add(I_VARIABLE);
++        add(0);
++        add(-1);
++        add(I_READ);
++        add(1);
++        add(I_ENDPPROC);
++        add(0);
++
+ 	fvsyms.insert(Symbol("exit", TY_FUNC, pos()));
+ 	add(I_ENDPROG);
+ 

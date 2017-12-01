@@ -1,0 +1,58 @@
+CC = g++
+CCFLAGS = -g -W -Wall
+
+FLEX = flex
+FLEX_OPTS = -Pzp
+
+BISON = bison
+BISON_OPTS = -t -pzp
+
+OBJS = Absyn.o Lexer.o Parser.o codegen.o symbtable.o pstcode.o
+
+.PHONY: clean distclean pstack
+
+all: compiler2017 pstack/api
+
+pstack/api: pstack/api.c
+	make -C pstack
+
+clean:
+	rm -f *.o compiler2017 zp.aux zp.log zp.pdf zp.dvi zp.ps zp
+	make -C pstack clean
+
+distclean: clean
+	rm -f Absyn.C Absyn.H Test.C Parser.C Parser.H Lexer.C Skeleton.C Skeleton.H Printer.C Printer.H zp.l zp.y zp.tex 
+
+compiler2017: ${OBJS} main.o
+	@echo "Linking compiler2017..."
+	${CC} ${CCFLAGS} -o $@ $^ 
+
+codegen.o: codegen.cc codegen.h symbtable.h pstack/apm.h
+	${CC} ${CCFLAGS} -c $<
+
+Absyn.o: Absyn.C Absyn.H
+	${CC} ${CCFLAGS} -c $<
+
+Lexer.C: zp.l
+	${FLEX} -o$@ $<
+
+Parser.C: zp.y
+	${BISON} -o$@ $<
+
+Lexer.o: Lexer.C Parser.H
+	${CC} ${CCFLAGS} -c $<
+
+Parser.o: Parser.C Absyn.H
+	${CC} ${CCFLAGS} -c $<
+
+main.o: main.cc Parser.H Absyn.H codegen.h
+	${CC} ${CCFLAGS} -c main.cc
+
+symbtable.o: symbtable.cc symbtable.h
+	${CC} ${CCFLAGS} -c symbtable.cc
+
+pstcode.o: pstcode.cc pstcode.h
+	${CC} ${CCFLAGS} -c pstcode.cc
+
+
+

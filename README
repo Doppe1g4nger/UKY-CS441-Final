@@ -1,0 +1,24 @@
+USAGE:
+  # Build both the compiler and pstack:
+  make
+
+  # Compile fib.cmm, producing fib.apm:
+  ./compiler fib.cmm fib.apm
+
+  # Disassemble fib.apm:
+  ./pstack/apd fib
+  # Execute fib.apm:
+  ./pstack/api fib
+
+BUILT-IN-FUNCTIONS:
+  The cmm standard library contains three functions:
+
+  exit()      : ends the program immediately
+  puts("...") : prints a string (only literal strings are supported)
+  putn(num)   : prints an integer (like printf("\t%d\n", num))
+
+Note that function calls are not checked for number and type of
+arguments: giving the wrong number is likely to smash the stack.
+All functions return a value.
+
+Functions with multiple arguments are not parsed correctly.

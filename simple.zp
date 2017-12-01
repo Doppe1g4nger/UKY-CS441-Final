@@ -1,0 +1,13 @@
+//simple.cmm 
+//Input: None
+//Output: 2017 
+int main ()
+{
+int sum;
+int i;
+sum = 2016;
+i = 1;
+sum = sum + i;
+putn (sum);
+return 0;
+}
