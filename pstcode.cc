@@ -81,7 +81,7 @@ void PstackCode::prolog(SymbolTable &fvsyms)
 
 
         // getnum() function added (11/28) 
-        fvsyms.insert(Symbol("getnum", TY_FUNC, pos(), 0));
+        fvsyms.insert(Symbol("getnum", TY_FUNC, pos()));
         add(I_VARIABLE);
         add(0);
         add(-1);
