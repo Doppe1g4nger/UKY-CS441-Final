@@ -113,6 +113,33 @@ void CodeGen::visitSWhile(SWhile *swhile)
     code.at(patchloc) = code.pos() - (patchloc - 1);
 }
 
+void CodeGen::visitSFor(SFor *sfor)
+{
+    int looploc = code.pos();
+    sfor->exp_1->accept(this);
+    code.add(I_JR_IF_FALSE);
+    code.add(0);
+    int patchloc = code.pos() - 1;
+    sfor->stm_->accept(this);
+    sfor->exp_2->accept(this);
+    code.add(I_JR);
+    code.add(looploc - (code.pos() - 1));
+    code.at(patchloc) = code.pos() - (patchloc - 1);
+}
+void CodeGen::visitSFor3(SFor3 *sfor)
+{
+    int looploc = code.pos();
+    sfor->exp_2->accept(this);
+    code.add(I_JR_IF_FALSE);
+    code.add(0);
+    int patchloc = code.pos() - 1;
+    sfor->stm_->accept(this);
+    sfor->exp_3->accept(this);
+    code.add(I_JR);
+    code.add(looploc - (code.pos() - 1));
+    code.at(patchloc) = code.pos() - (patchloc - 1);
+}
+
 void CodeGen::visitSIf(SIf *sif)
 {
     sif->exp_->accept(this);
@@ -121,6 +148,22 @@ void CodeGen::visitSIf(SIf *sif)
     int patchloc = code.pos() - 1;
 
     sif->stm_->accept(this); // Body.
+    code.at(patchloc) = code.pos() - (patchloc - 1);
+}
+
+void CodeGen::visitSIfElse(SIfElse *sifelse)
+{
+    sifelse->exp_->accept(this);
+    code.add(I_JR_IF_FALSE);
+    code.add(0);
+    int patchloc = code.pos() - 1;
+
+    sifelse->stm_1->accept(this);
+    code.add(I_JR);
+    code.at(patchloc) = code.pos() - (patchloc - 1);
+    code.add(0);
+    patchloc = code.pos() - 1;
+    sifelse->stm_2->accept(this);
     code.at(patchloc) = code.pos() - (patchloc - 1);
 }
 

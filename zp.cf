@@ -14,7 +14,10 @@ SDecl.   Stm ::= Decl ";"  ;
 SExp.    Stm ::= Exp ";" ;
 SBlock.  Stm ::= "{" [Stm] "}" ;
 SWhile.  Stm ::= "while" "(" Exp ")" Stm ;
+SFor.    Stm ::= "for" "(" Exp ";" Exp ")" Stm ;
+SFor3.   Stm ::= "for" "(" Exp ";" Exp ";" Exp ")" Stm ; 
 SIf.     Stm ::= "if" "(" Exp ")" Stm ;
+SIfElse. Stm ::= "if" "(" Exp ")" Stm "else" Stm ;
 SReturn. Stm ::= "return" Exp  ";" ;
 
 EAss.    Exp  ::= Ident "=" Exp ;

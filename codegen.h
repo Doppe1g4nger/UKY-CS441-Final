@@ -75,7 +75,9 @@ public:
     void visitSBlock(SBlock *p);
     void visitSWhile(SWhile *p);
     void visitSIf(SIf *p);
-    void visitSIfElse(SIf *p);
+    void visitSFor(SFor *p);
+    void visitSFor3(SFor3 *p);
+    void visitSIfElse(SIfElse *p);
     void visitSReturn(SReturn *p);
 
     // Expressions

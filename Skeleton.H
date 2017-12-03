@@ -21,6 +21,10 @@ public:
   void visitSExp(SExp* p);
   void visitSBlock(SBlock* p);
   void visitSWhile(SWhile* p);
+  void visitSFor(SFor* p);
+  void visitSFor3(SFor3* p);
+  void visitSIf(SIf* p);
+  void visitSIfElse(SIfElse* p);
   void visitSReturn(SReturn* p);
   void visitEAss(EAss* p);
   void visitELt(ELt* p);

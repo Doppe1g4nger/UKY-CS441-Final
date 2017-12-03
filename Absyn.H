@@ -32,6 +32,10 @@ class SDecl;
 class SExp;
 class SBlock;
 class SWhile;
+class SFor;
+class SFor3;
+class SIf;
+class SIfElse;
 class SReturn;
 class EAss;
 class ELt;
@@ -70,6 +74,10 @@ public:
   virtual void visitSExp(SExp *p) = 0;
   virtual void visitSBlock(SBlock *p) = 0;
   virtual void visitSWhile(SWhile *p) = 0;
+  virtual void visitSFor(SFor *p) = 0;
+  virtual void visitSFor3(SFor3 *p) = 0;
+  virtual void visitSIf(SIf *p) = 0;
+  virtual void visitSIfElse(SIfElse *p) = 0;
   virtual void visitSReturn(SReturn *p) = 0;
   virtual void visitEAss(EAss *p) = 0;
   virtual void visitELt(ELt *p) = 0;
@@ -254,6 +262,70 @@ public:
   virtual void accept(Visitor *v);
   virtual SWhile *clone() const;
   void swap(SWhile &);
+};
+
+class SFor : public Stm
+{
+public:
+  Exp *exp_1;
+  Exp *exp_2;
+  Stm *stm_;
+
+  SFor(const SFor &);
+  SFor &operator=(const SFor &);
+  SFor(Exp *p1, Exp *p2, Stm *p3);
+  ~SFor();
+  virtual void accept(Visitor *v);
+  virtual SFor *clone() const;
+  void swap(SFor &);
+};
+
+class SFor3 : public Stm
+{
+public:
+  Exp *exp_1;
+  Exp *exp_2;
+  Exp *exp_3;
+  Stm *stm_;
+
+  SFor3(const SFor3 &);
+  SFor3 &operator=(const SFor3 &);
+  SFor3(Exp *p1, Exp *p2, Exp *p3, Stm *p4);
+  ~SFor3();
+  virtual void accept(Visitor *v);
+  virtual SFor3 *clone() const;
+  void swap(SFor3 &);
+};
+
+class SIf : public Stm
+{
+public:
+  Exp *exp_;
+  Stm *stm_;
+
+  SIf(const SIf &);
+  SIf &operator=(const SIf &);
+  SIf(Exp *p1, Stm *p2);
+  ~SIf();
+  virtual void accept(Visitor *v);
+  virtual SIf *clone() const;
+  void swap(SIf &);
+};
+
+class SIfElse : public Stm
+{
+public:
+  Exp *exp_;
+  Stm *stm_1;
+  Stm *stm_2;
+
+  SIfElse(const SIfElse &);
+  SIfElse &operator=(const SIfElse &);
+  SIfElse(Exp *p1, Stm *p2, Stm *p3);
+  ~SIfElse();
+  virtual void accept(Visitor *v);
+  virtual SIfElse *clone() const;
+  void swap(SIfElse &);
 };
 
 class SReturn : public Stm

@@ -76,6 +76,46 @@ void Skeleton::visitSWhile(SWhile *swhile)
 
 }
 
+void Skeleton::visitSFor(SFor *sfor)
+{
+  /* Code For SFor Goes Here */
+
+  sfor->exp_1->accept(this);
+  sfor->exp_2->accept(this);
+  sfor->stm_->accept(this);
+
+}
+
+void Skeleton::visitSFor3(SFor3 *sfor3)
+{
+  /* Code For SFor3 Goes Here */
+
+  sfor3->exp_1->accept(this);
+  sfor3->exp_2->accept(this);
+  sfor3->exp_3->accept(this);
+  sfor3->stm_->accept(this);
+
+}
+
+void Skeleton::visitSIf(SIf *sif)
+{
+  /* Code For SIf Goes Here */
+
+  sif->exp_->accept(this);
+  sif->stm_->accept(this);
+
+}
+
+void Skeleton::visitSIfElse(SIfElse *sifelse)
+{
+  /* Code For SIfElse Goes Here */
+
+  sifelse->exp_->accept(this);
+  sifelse->stm_1->accept(this);
+  sifelse->stm_2->accept(this);
+
+}
+
 void Skeleton::visitSReturn(SReturn *sreturn)
 {
   /* Code For SReturn Goes Here */

@@ -425,9 +425,12 @@ Type* pType(const char *str)
 %token _SYMB_9    //   -
 %token _SYMB_10    //   *
 %token _SYMB_11    //   double
-%token _SYMB_12    //   int
-%token _SYMB_13    //   return
-%token _SYMB_14    //   while
+%token _SYMB_12    //   else
+%token _SYMB_13    //   for
+%token _SYMB_14    //   if
+%token _SYMB_15    //   int
+%token _SYMB_16    //   return
+%token _SYMB_17    //   while
 
 %type <program_> Program
 %type <function_> Function
@@ -474,8 +477,12 @@ ListIdent : _IDENT_ {  $$ = new ListIdent() ; $$->push_back($1); YY_RESULT_ListI
 Stm : Decl _SYMB_5 {  $$ = new SDecl($1); YY_RESULT_Stm_= $$; } 
   | Exp _SYMB_5 {  $$ = new SExp($1); YY_RESULT_Stm_= $$; }
   | _SYMB_2 ListStm _SYMB_3 {  $$ = new SBlock($2); YY_RESULT_Stm_= $$; }
-  | _SYMB_14 _SYMB_0 Exp _SYMB_1 Stm {  $$ = new SWhile($3, $5); YY_RESULT_Stm_= $$; }
-  | _SYMB_13 Exp _SYMB_5 {  $$ = new SReturn($2); YY_RESULT_Stm_= $$; }
+  | _SYMB_17 _SYMB_0 Exp _SYMB_1 Stm {  $$ = new SWhile($3, $5); YY_RESULT_Stm_= $$; }
+  | _SYMB_13 _SYMB_0 Exp _SYMB_5 Exp _SYMB_1 Stm {  $$ = new SFor($3, $5, $7); YY_RESULT_Stm_= $$; }
+  | _SYMB_13 _SYMB_0 Exp _SYMB_5 Exp _SYMB_5 Exp _SYMB_1 Stm {  $$ = new SFor3($3, $5, $7, $9); YY_RESULT_Stm_= $$; }
+  | _SYMB_14 _SYMB_0 Exp _SYMB_1 Stm {  $$ = new SIf($3, $5); YY_RESULT_Stm_= $$; }
+  | _SYMB_14 _SYMB_0 Exp _SYMB_1 Stm _SYMB_12 Stm {  $$ = new SIfElse($3, $5, $7); YY_RESULT_Stm_= $$; }
+  | _SYMB_16 Exp _SYMB_5 {  $$ = new SReturn($2); YY_RESULT_Stm_= $$; }
 ;
 Exp : _IDENT_ _SYMB_6 Exp {  $$ = new EAss($1, $3); YY_RESULT_Exp_= $$; } 
   | Exp1 {  $$ = $1; YY_RESULT_Exp_= $$; }
@@ -501,7 +508,7 @@ ListExp : /* empty */ {  $$ = new ListExp(); YY_RESULT_ListExp_= $$; }
   | Exp {  $$ = new ListExp() ; $$->push_back($1); YY_RESULT_ListExp_= $$; }
   | Exp _SYMB_4 ListExp {  $3->push_back($1) ; $$ = $3 ; YY_RESULT_ListExp_= $$; }
 ;
-Type : _SYMB_12 {  $$ = new TInt(); YY_RESULT_Type_= $$; } 
+Type : _SYMB_15 {  $$ = new TInt(); YY_RESULT_Type_= $$; } 
   | _SYMB_11 {  $$ = new TDouble(); YY_RESULT_Type_= $$; }
 ;
 

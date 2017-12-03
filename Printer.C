@@ -239,6 +239,78 @@ void PrintAbsyn::visitSWhile(SWhile* p)
   _i_ = oldi;
 }
 
+void PrintAbsyn::visitSFor(SFor* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(_L_PAREN);
+
+  render("for");
+  render('(');
+  _i_ = 0; p->exp_1->accept(this);
+  render(';');
+  _i_ = 0; p->exp_2->accept(this);
+  render(')');
+  _i_ = 0; p->stm_->accept(this);
+
+  if (oldi > 0) render(_R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitSFor3(SFor3* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(_L_PAREN);
+
+  render("for");
+  render('(');
+  _i_ = 0; p->exp_1->accept(this);
+  render(';');
+  _i_ = 0; p->exp_2->accept(this);
+  render(';');
+  _i_ = 0; p->exp_3->accept(this);
+  render(')');
+  _i_ = 0; p->stm_->accept(this);
+
+  if (oldi > 0) render(_R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitSIf(SIf* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(_L_PAREN);
+
+  render("if");
+  render('(');
+  _i_ = 0; p->exp_->accept(this);
+  render(')');
+  _i_ = 0; p->stm_->accept(this);
+
+  if (oldi > 0) render(_R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitSIfElse(SIfElse* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(_L_PAREN);
+
+  render("if");
+  render('(');
+  _i_ = 0; p->exp_->accept(this);
+  render(')');
+  _i_ = 0; p->stm_1->accept(this);
+  render("else");
+  _i_ = 0; p->stm_2->accept(this);
+
+  if (oldi > 0) render(_R_PAREN);
+
+  _i_ = oldi;
+}
+
 void PrintAbsyn::visitSReturn(SReturn* p)
 {
   int oldi = _i_;
@@ -599,6 +671,64 @@ void ShowAbsyn::visitSWhile(SWhile* p)
   bufAppend('[');
   if (p->stm_)  p->stm_->accept(this);
   bufAppend(']');
+  bufAppend(')');
+}
+void ShowAbsyn::visitSFor(SFor* p)
+{
+  bufAppend('(');
+  bufAppend("SFor");
+  bufAppend(' ');
+  p->exp_1->accept(this);
+  bufAppend(' ');
+  p->exp_2->accept(this);
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->stm_)  p->stm_->accept(this);
+  bufAppend(']');
+  bufAppend(')');
+}
+void ShowAbsyn::visitSFor3(SFor3* p)
+{
+  bufAppend('(');
+  bufAppend("SFor3");
+  bufAppend(' ');
+  p->exp_1->accept(this);
+  bufAppend(' ');
+  p->exp_2->accept(this);
+  bufAppend(' ');
+  p->exp_3->accept(this);
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->stm_)  p->stm_->accept(this);
+  bufAppend(']');
+  bufAppend(')');
+}
+void ShowAbsyn::visitSIf(SIf* p)
+{
+  bufAppend('(');
+  bufAppend("SIf");
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->exp_)  p->exp_->accept(this);
+  bufAppend(']');
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->stm_)  p->stm_->accept(this);
+  bufAppend(']');
+  bufAppend(')');
+}
+void ShowAbsyn::visitSIfElse(SIfElse* p)
+{
+  bufAppend('(');
+  bufAppend("SIfElse");
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->exp_)  p->exp_->accept(this);
+  bufAppend(']');
+  bufAppend(' ');
+  p->stm_1->accept(this);
+  bufAppend(' ');
+  p->stm_2->accept(this);
   bufAppend(')');
 }
 void ShowAbsyn::visitSReturn(SReturn* p)
