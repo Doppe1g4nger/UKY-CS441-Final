@@ -5,7 +5,7 @@
 int main () 
 {
       int m;
-        m = getnum();
-          putn(m);
-            return 0;
+      m = getnum();
+      putn(m);
+      return 0;
 }
