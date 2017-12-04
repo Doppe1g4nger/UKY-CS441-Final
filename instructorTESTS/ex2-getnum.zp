@@ -6,11 +6,11 @@
 int main () 
 {
       int m1,m2;
-        puts("Enter the last five digits of SID -- first member:\n");
-          m1 = getnum();
-            puts("Enter the last five digits of SID -- second member:\n");
-              m2 = getnum();
-                putn(m1);
-                  putn(m2);
-                    return 0;
+      puts("Enter the last five digits of SID -- first member:\n");
+      m1 = getnum();
+      puts("Enter the last five digits of SID -- second member:\n");
+      m2 = getnum();
+      putn(m1);
+      putn(m2);
+      return 0;
 }
