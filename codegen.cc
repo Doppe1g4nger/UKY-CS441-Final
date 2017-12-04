@@ -115,20 +115,20 @@ void CodeGen::visitSWhile(SWhile *swhile)
 
 void CodeGen::visitSFor(SFor *sfor)
 {
-    int looploc = code.pos();
-    sfor->exp_1->accept(this);
-    code.add(I_JR_IF_FALSE);
+    int looploc = code.pos(); // Just like While loop with extra statement
+    sfor->exp_1->accept(this); //Place test code
+    code.add(I_JR_IF_FALSE); //Jump past the body if test fails
     code.add(0);
     int patchloc = code.pos() - 1;
-    sfor->stm_->accept(this);
-    sfor->exp_2->accept(this);
+    sfor->stm_->accept(this); // Run body of code
+    sfor->exp_2->accept(this); // Run expression to get closer to end of for loop
     code.add(I_JR);
-    code.add(looploc - (code.pos() - 1));
+    code.add(looploc - (code.pos() - 1)); // offset to looploc
     code.at(patchloc) = code.pos() - (patchloc - 1);
 }
 void CodeGen::visitSFor3(SFor3 *sfor)
 {
-    int looploc = code.pos();
+    int looploc = code.pos(); //Same as 2 arg for, first statement thrown out
     sfor->exp_2->accept(this);
     code.add(I_JR_IF_FALSE);
     code.add(0);
@@ -153,17 +153,17 @@ void CodeGen::visitSIf(SIf *sif)
 
 void CodeGen::visitSIfElse(SIfElse *sifelse)
 {
-    sifelse->exp_->accept(this);
-    code.add(I_JR_IF_FALSE);
+    sifelse->exp_->accept(this); // Put expression code
+    code.add(I_JR_IF_FALSE); // Jump past body if expression false
     code.add(0);
     int patchloc = code.pos() - 1;
 
-    sifelse->stm_1->accept(this);
-    code.add(I_JR);
-    code.at(patchloc) = code.pos() - (patchloc - 1);
+    sifelse->stm_1->accept(this); //Body
+    code.add(I_JR); // Jump past else
+    code.at(patchloc) = code.pos() - (patchloc - 2); //Jump to statement after Jump
     code.add(0);
     patchloc = code.pos() - 1;
-    sifelse->stm_2->accept(this);
+    sifelse->stm_2->accept(this); // Else body
     code.at(patchloc) = code.pos() - (patchloc - 1);
 }
 
