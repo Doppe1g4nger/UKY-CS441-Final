@@ -1,13 +1,13 @@
 int main() {
-        int a;
-            int b;
+    int a;
+    int b;
 
-                a = 1;
-                    b = 2;
+    a = 1;
+    b = 2;
 
-                        if (a < b) {
-                                    puts("a is less than b");
-                                        }
+    if (a < b) {
+       puts("a is less than b");
+    }
 
-                                            return 0;
+    return 0;
 }
