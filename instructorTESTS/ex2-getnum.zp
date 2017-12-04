@@ -1,0 +1,16 @@
+//  Purpose: Test for getnum()
+//  input: your SD [last 5 digits] -- team member #1
+//  input: your SD -- team member #2
+//  Expected output: two numbers
+
+int main () 
+{
+      int m1,m2;
+        puts("Enter the last five digits of SID -- first member:\n");
+          m1 = getnum();
+            puts("Enter the last five digits of SID -- second member:\n");
+              m2 = getnum();
+                putn(m1);
+                  putn(m2);
+                    return 0;
+}

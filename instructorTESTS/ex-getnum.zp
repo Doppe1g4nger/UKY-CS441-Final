@@ -1,0 +1,11 @@
+//  Purpose: Test for getnum()
+//  input: m (from the keyboard)
+//  Expected output: m (for this testing use m=2017)
+
+int main () 
+{
+      int m;
+        m = getnum();
+          putn(m);
+            return 0;
+}

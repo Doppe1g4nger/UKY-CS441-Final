@@ -1,0 +1,21 @@
+//  File: simple1_for2.zp
+//  For testing for( ;  ) 
+//  Authors: provided by JWJ
+//  input: none
+//  expected output: 2015 2016 2017 2018 2019
+
+int main()
+{
+         int n;
+              int counter;
+                   n = 2015;
+                        counter = 0;
+
+                             for(counter < 5; counter = counter + 1)
+                                      {
+                                            putn(n);
+                                                    n = n + 1;
+                                                         }
+                                                              return 0;
+}
+

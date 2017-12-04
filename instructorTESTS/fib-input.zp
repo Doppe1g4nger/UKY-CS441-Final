@@ -1,0 +1,30 @@
+//  File: fib-input.zp
+//  Expected output: Fibonacci numbers up to n
+
+int main () 
+{
+      int n;
+      //  n = getnum();
+          n = 10;
+
+            puts("Fibonacci numbers\n");
+              puts("Up to ");
+                putn(n);
+                  puts("\n");
+
+                    int lo; 
+                      int hi;
+                        lo = 1;
+                          hi = lo;
+                            putn(lo);
+                              putn(hi);
+                                puts("+++++++++++\n");
+
+                                  while (hi < n) {
+                                          putn(hi);
+                                              hi = lo + hi;
+                                                  lo = hi - lo;
+                                                    }
+                                                      puts("+++++++++++\n");
+                                                        return 0;
+}
