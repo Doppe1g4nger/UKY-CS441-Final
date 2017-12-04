@@ -1,0 +1,13 @@
+int main()
+{
+    int i;
+    i = getnum();
+    if(i < 1)
+    {
+    }
+    else
+    {
+        i = getnum();
+    }
+    return 0;
+}

@@ -1,0 +1,21 @@
+ int main ()
+{
+    int i;
+    for (i; i < 5; i = i + 1)
+    {
+        int var;
+        var = getnum();
+        if (var < 15)
+        {
+            puts("Less Than 15\n");
+        }
+        else if (var < 25)
+        {
+            puts("Less Than 25\n");
+        }
+        else
+        {
+            puts("Greater than or equal to 25\n");
+        }
+    }
+}

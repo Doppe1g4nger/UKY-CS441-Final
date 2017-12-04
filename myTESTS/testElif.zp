@@ -1,0 +1,15 @@
+ int main ()
+{
+    int sum;
+    int i;
+    sum = getnum();
+    if (sum < 35)
+    {
+        puts("Less than 35\n");
+    }
+    else if (sum < 50)
+    {
+        puts("Less than 50\n");
+    }
+    return 0;
+}
