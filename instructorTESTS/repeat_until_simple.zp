@@ -1,9 +1,9 @@
 int main() {
         int i;
-            i = 10;
+        i = 10;
 
-                repeat {
-                            putn(i);
-                                    i = i - 1;
-                                        } until (1 < i);
+        repeat {
+            putn(i);
+            i = i - 1;
+        } until (1 < i);
 }
