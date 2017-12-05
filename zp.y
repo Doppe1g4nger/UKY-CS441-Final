@@ -429,8 +429,10 @@ Type* pType(const char *str)
 %token _SYMB_13    //   for
 %token _SYMB_14    //   if
 %token _SYMB_15    //   int
-%token _SYMB_16    //   return
-%token _SYMB_17    //   while
+%token _SYMB_16    //   repeat
+%token _SYMB_17    //   return
+%token _SYMB_18    //   until
+%token _SYMB_19    //   while
 
 %type <program_> Program
 %type <function_> Function
@@ -477,12 +479,13 @@ ListIdent : _IDENT_ {  $$ = new ListIdent() ; $$->push_back($1); YY_RESULT_ListI
 Stm : Decl _SYMB_5 {  $$ = new SDecl($1); YY_RESULT_Stm_= $$; } 
   | Exp _SYMB_5 {  $$ = new SExp($1); YY_RESULT_Stm_= $$; }
   | _SYMB_2 ListStm _SYMB_3 {  $$ = new SBlock($2); YY_RESULT_Stm_= $$; }
-  | _SYMB_17 _SYMB_0 Exp _SYMB_1 Stm {  $$ = new SWhile($3, $5); YY_RESULT_Stm_= $$; }
+  | _SYMB_19 _SYMB_0 Exp _SYMB_1 Stm {  $$ = new SWhile($3, $5); YY_RESULT_Stm_= $$; }
+  | _SYMB_16 Stm _SYMB_18 _SYMB_0 Exp _SYMB_1 _SYMB_5 {  $$ = new SRepeat($2, $5); YY_RESULT_Stm_= $$; }
   | _SYMB_13 _SYMB_0 Exp _SYMB_5 Exp _SYMB_1 Stm {  $$ = new SFor($3, $5, $7); YY_RESULT_Stm_= $$; }
   | _SYMB_13 _SYMB_0 Exp _SYMB_5 Exp _SYMB_5 Exp _SYMB_1 Stm {  $$ = new SFor3($3, $5, $7, $9); YY_RESULT_Stm_= $$; }
   | _SYMB_14 _SYMB_0 Exp _SYMB_1 Stm {  $$ = new SIf($3, $5); YY_RESULT_Stm_= $$; }
   | _SYMB_14 _SYMB_0 Exp _SYMB_1 Stm _SYMB_12 Stm {  $$ = new SIfElse($3, $5, $7); YY_RESULT_Stm_= $$; }
-  | _SYMB_16 Exp _SYMB_5 {  $$ = new SReturn($2); YY_RESULT_Stm_= $$; }
+  | _SYMB_17 Exp _SYMB_5 {  $$ = new SReturn($2); YY_RESULT_Stm_= $$; }
 ;
 Exp : _IDENT_ _SYMB_6 Exp {  $$ = new EAss($1, $3); YY_RESULT_Exp_= $$; } 
   | Exp1 {  $$ = $1; YY_RESULT_Exp_= $$; }

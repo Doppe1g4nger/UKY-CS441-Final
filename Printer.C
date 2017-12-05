@@ -239,6 +239,24 @@ void PrintAbsyn::visitSWhile(SWhile* p)
   _i_ = oldi;
 }
 
+void PrintAbsyn::visitSRepeat(SRepeat* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(_L_PAREN);
+
+  render("repeat");
+  _i_ = 0; p->stm_->accept(this);
+  render("until");
+  render('(');
+  _i_ = 0; p->exp_->accept(this);
+  render(')');
+  render(';');
+
+  if (oldi > 0) render(_R_PAREN);
+
+  _i_ = oldi;
+}
+
 void PrintAbsyn::visitSFor(SFor* p)
 {
   int oldi = _i_;
@@ -671,6 +689,21 @@ void ShowAbsyn::visitSWhile(SWhile* p)
   bufAppend('[');
   if (p->stm_)  p->stm_->accept(this);
   bufAppend(']');
+  bufAppend(')');
+}
+void ShowAbsyn::visitSRepeat(SRepeat* p)
+{
+  bufAppend('(');
+  bufAppend("SRepeat");
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->stm_)  p->stm_->accept(this);
+  bufAppend(']');
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->exp_)  p->exp_->accept(this);
+  bufAppend(']');
+  bufAppend(' ');
   bufAppend(')');
 }
 void ShowAbsyn::visitSFor(SFor* p)

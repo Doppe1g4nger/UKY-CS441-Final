@@ -74,6 +74,7 @@ public:
     void visitSExp(SExp *p);
     void visitSBlock(SBlock *p);
     void visitSWhile(SWhile *p);
+    void visitSRepeat(SRepeat *p);
     void visitSIf(SIf *p);
     void visitSFor(SFor *p);
     void visitSFor3(SFor3 *p);

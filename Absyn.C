@@ -332,6 +332,54 @@ SWhile *SWhile::clone() const
 
 
 
+/********************   SRepeat    ********************/
+SRepeat::SRepeat(Stm *p1, Exp *p2)
+{
+  stm_ = p1;
+  exp_ = p2;
+
+}
+
+SRepeat::SRepeat(const SRepeat & other)
+{
+  stm_ = other.stm_->clone();
+  exp_ = other.exp_->clone();
+
+}
+
+SRepeat &SRepeat::operator=(const SRepeat & other)
+{
+  SRepeat tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void SRepeat::swap(SRepeat & other)
+{
+  std::swap(stm_, other.stm_);
+  std::swap(exp_, other.exp_);
+
+}
+
+SRepeat::~SRepeat()
+{
+  delete(stm_);
+  delete(exp_);
+
+}
+
+void SRepeat::accept(Visitor *v)
+{
+  v->visitSRepeat(this);
+}
+
+SRepeat *SRepeat::clone() const
+{
+  return new SRepeat(*this);
+}
+
+
+
 /********************   SFor    ********************/
 SFor::SFor(Exp *p1, Exp *p2, Stm *p3)
 {

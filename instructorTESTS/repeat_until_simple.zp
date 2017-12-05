@@ -1,9 +1,11 @@
 int main() {
         int i;
-        i = 10;
-
+        i = 0;
         repeat {
+            if (i < 15){
+                puts("bloop");
+            }
+            i = getnum();
             putn(i);
-            i = i - 1;
-        } until (1 < i);
+        } until (i < 0);
 }

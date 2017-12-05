@@ -113,6 +113,15 @@ void CodeGen::visitSWhile(SWhile *swhile)
     code.at(patchloc) = code.pos() - (patchloc - 1);
 }
 
+void CodeGen::visitSRepeat(SRepeat *srep)
+{
+    int looploc = code.pos();
+    srep->stm_->accept(this);
+    srep->exp_->accept(this);
+    code.add(I_JR_IF_FALSE);
+    code.add(looploc - (code.pos() - 1));
+}
+
 void CodeGen::visitSFor(SFor *sfor)
 {
     int looploc = code.pos(); // Just like While loop with extra statement

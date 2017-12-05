@@ -80,10 +80,12 @@ Type* pType(const char *str);
 #define _SYMB_15 274
 #define _SYMB_16 275
 #define _SYMB_17 276
-#define _STRING_ 277
-#define _INTEGER_ 278
-#define _DOUBLE_ 279
-#define _IDENT_ 280
+#define _SYMB_18 277
+#define _SYMB_19 278
+#define _STRING_ 279
+#define _INTEGER_ 280
+#define _DOUBLE_ 281
+#define _IDENT_ 282
 
 extern YYSTYPE yylval;
 

@@ -76,6 +76,15 @@ void Skeleton::visitSWhile(SWhile *swhile)
 
 }
 
+void Skeleton::visitSRepeat(SRepeat *srepeat)
+{
+  /* Code For SRepeat Goes Here */
+
+  srepeat->stm_->accept(this);
+  srepeat->exp_->accept(this);
+
+}
+
 void Skeleton::visitSFor(SFor *sfor)
 {
   /* Code For SFor Goes Here */

@@ -32,6 +32,7 @@ class SDecl;
 class SExp;
 class SBlock;
 class SWhile;
+class SRepeat;
 class SFor;
 class SFor3;
 class SIf;
@@ -74,6 +75,7 @@ public:
   virtual void visitSExp(SExp *p) = 0;
   virtual void visitSBlock(SBlock *p) = 0;
   virtual void visitSWhile(SWhile *p) = 0;
+  virtual void visitSRepeat(SRepeat *p) = 0;
   virtual void visitSFor(SFor *p) = 0;
   virtual void visitSFor3(SFor3 *p) = 0;
   virtual void visitSIf(SIf *p) = 0;
@@ -262,6 +264,21 @@ public:
   virtual void accept(Visitor *v);
   virtual SWhile *clone() const;
   void swap(SWhile &);
+};
+
+class SRepeat : public Stm
+{
+public:
+  Stm *stm_;
+  Exp *exp_;
+
+  SRepeat(const SRepeat &);
+  SRepeat &operator=(const SRepeat &);
+  SRepeat(Stm *p1, Exp *p2);
+  ~SRepeat();
+  virtual void accept(Visitor *v);
+  virtual SRepeat *clone() const;
+  void swap(SRepeat &);
 };
 
 class SFor : public Stm

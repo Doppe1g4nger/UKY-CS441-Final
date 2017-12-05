@@ -44,6 +44,7 @@ void render(char* s);
   void visitSExp(SExp *p);
   void visitSBlock(SBlock *p);
   void visitSWhile(SWhile *p);
+  void visitSRepeat(SRepeat *p);
   void visitSFor(SFor *p);
   void visitSFor3(SFor3 *p);
   void visitSIf(SIf *p);
@@ -152,6 +153,7 @@ class ShowAbsyn : public Visitor
   void visitSExp(SExp *p);
   void visitSBlock(SBlock *p);
   void visitSWhile(SWhile *p);
+  void visitSRepeat(SRepeat *p);
   void visitSFor(SFor *p);
   void visitSFor3(SFor3 *p);
   void visitSIf(SIf *p);
