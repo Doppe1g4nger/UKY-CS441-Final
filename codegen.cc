@@ -115,10 +115,10 @@ void CodeGen::visitSWhile(SWhile *swhile)
 
 void CodeGen::visitSRepeat(SRepeat *srep)
 {
-    int looploc = code.pos();
+    int looploc = code.pos(); //Store location of Body start
     srep->stm_->accept(this);
-    srep->exp_->accept(this);
-    code.add(I_JR_IF_FALSE);
+    srep->exp_->accept(this); // Evaluate expression
+    code.add(I_JR_IF_FALSE); // Jump to statement start if expression False
     code.add(looploc - (code.pos() - 1));
 }
 
