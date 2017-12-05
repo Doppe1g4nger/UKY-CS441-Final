@@ -1,11 +1,8 @@
 int main() {
         int i;
-        i = 0;
+        i = 10;
         repeat {
-            if (i < 15){
-                puts("bloop");
-            }
-            i = getnum();
             putn(i);
-        } until (i < 0);
+            i = i - 1;
+        } until (i < 10);
 }
