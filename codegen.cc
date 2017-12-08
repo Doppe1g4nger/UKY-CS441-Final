@@ -180,13 +180,14 @@ void CodeGen::visitSReturn(SReturn *sreturn)
 {
     // Could avoid the I_SWAP later if we generate code for the
     // return expression after pushing the return value address.
-    sreturn->exp_->accept(this);
+    // sreturn->exp_->accept(this);
 
     // Store the top of stack (return value) at (bp-funargs)
     code.add(I_VARIABLE);
     code.add(0);
     code.add(-(funargs+1));
-    code.add(I_SWAP);
+    //code.add(I_SWAP);
+    sreturn->exp_->accept(this); // Evaluate expression after variable assignment to avoid swap
     code.add(I_ASSIGN);
     code.add(1);
 
