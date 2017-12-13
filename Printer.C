@@ -289,13 +289,12 @@ void PrintAbsyn::visitSFor3(SFor3* p)
 
   render("for");
   render('(');
+  _i_ = 0; p->stm_1->accept(this);
   _i_ = 0; p->exp_1->accept(this);
   render(';');
   _i_ = 0; p->exp_2->accept(this);
-  render(';');
-  _i_ = 0; p->exp_3->accept(this);
   render(')');
-  _i_ = 0; p->stm_->accept(this);
+  _i_ = 0; p->stm_2->accept(this);
 
   if (oldi > 0) render(_R_PAREN);
 
@@ -769,15 +768,13 @@ void ShowAbsyn::visitSFor3(SFor3* p)
   bufAppend('(');
   bufAppend("SFor3");
   bufAppend(' ');
+  p->stm_1->accept(this);
+  bufAppend(' ');
   p->exp_1->accept(this);
   bufAppend(' ');
   p->exp_2->accept(this);
   bufAppend(' ');
-  p->exp_3->accept(this);
-  bufAppend(' ');
-  bufAppend('[');
-  if (p->stm_)  p->stm_->accept(this);
-  bufAppend(']');
+  p->stm_2->accept(this);
   bufAppend(')');
 }
 void ShowAbsyn::visitSIf(SIf* p)

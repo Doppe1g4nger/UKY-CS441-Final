@@ -433,21 +433,21 @@ SFor *SFor::clone() const
 
 
 /********************   SFor3    ********************/
-SFor3::SFor3(Exp *p1, Exp *p2, Exp *p3, Stm *p4)
+SFor3::SFor3(Stm *p1, Exp *p2, Exp *p3, Stm *p4)
 {
-  exp_1 = p1;
-  exp_2 = p2;
-  exp_3 = p3;
-  stm_ = p4;
+  stm_1 = p1;
+  exp_1 = p2;
+  exp_2 = p3;
+  stm_2 = p4;
 
 }
 
 SFor3::SFor3(const SFor3 & other)
 {
+  stm_1 = other.stm_1->clone();
   exp_1 = other.exp_1->clone();
   exp_2 = other.exp_2->clone();
-  exp_3 = other.exp_3->clone();
-  stm_ = other.stm_->clone();
+  stm_2 = other.stm_2->clone();
 
 }
 
@@ -460,19 +460,19 @@ SFor3 &SFor3::operator=(const SFor3 & other)
 
 void SFor3::swap(SFor3 & other)
 {
+  std::swap(stm_1, other.stm_1);
   std::swap(exp_1, other.exp_1);
   std::swap(exp_2, other.exp_2);
-  std::swap(exp_3, other.exp_3);
-  std::swap(stm_, other.stm_);
+  std::swap(stm_2, other.stm_2);
 
 }
 
 SFor3::~SFor3()
 {
+  delete(stm_1);
   delete(exp_1);
   delete(exp_2);
-  delete(exp_3);
-  delete(stm_);
+  delete(stm_2);
 
 }
 

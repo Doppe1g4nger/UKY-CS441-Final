@@ -315,14 +315,14 @@ public:
 class SFor3 : public Stm
 {
 public:
+  Stm *stm_1;
   Exp *exp_1;
   Exp *exp_2;
-  Exp *exp_3;
-  Stm *stm_;
+  Stm *stm_2;
 
   SFor3(const SFor3 &);
   SFor3 &operator=(const SFor3 &);
-  SFor3(Exp *p1, Exp *p2, Exp *p3, Stm *p4);
+  SFor3(Stm *p1, Exp *p2, Exp *p3, Stm *p4);
   ~SFor3();
   virtual void accept(Visitor *v);
   virtual SFor3 *clone() const;

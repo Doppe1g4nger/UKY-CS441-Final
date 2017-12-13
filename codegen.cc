@@ -143,16 +143,41 @@ void CodeGen::visitSFor(SFor *sfor)
 }
 void CodeGen::visitSFor3(SFor3 *sfor)
 {
-    int looploc = code.pos(); //Same as 2 arg for, first statement thrown out
-    sfor->exp_2->accept(this);
+    /*code.add(I_CALL);
+    int callloc = code.pos();
+    code.add(0);
+    code.add(callloc+2);
+
+    code.add(I_PROC);
+    int startloc = code.pos(); // to be filled with number of local variables.
+    code.add(0);
+    code.add(code.pos() + 1); */
+    symbols.enter();
+    //int startvar = symbols.numvars();
+
+    sfor->stm_1->accept(this);
+
+    // Patch up the address of main.
+    //code.at(callloc) = symbols.levelof(currid) + 1;
+
+    int looploc = code.pos();
+    sfor->exp_1->accept(this);
     code.add(I_JR_IF_FALSE);
     code.add(0);
     int patchloc = code.pos() - 1;
-    sfor->stm_->accept(this);
-    sfor->exp_3->accept(this);
+    sfor->stm_2->accept(this);
+    sfor->exp_2->accept(this);
     code.add(I_JR);
     code.add(looploc - (code.pos() - 1));
     code.at(patchloc) = code.pos() - (patchloc - 1);
+
+    // Fill in number of local variables.
+    //code.at(startloc) = symbols.numvars() - startvar;
+    symbols.leave();
+
+    // Return, popping off our parameters.
+    //code.add(I_ENDPPROC);
+    //code.add(0);
 }
 
 void CodeGen::visitSIf(SIf *sif)

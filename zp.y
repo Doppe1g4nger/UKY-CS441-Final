@@ -555,7 +555,7 @@ Stm : Decl _SYMB_5 {  $$ = new SDecl($1); YY_RESULT_Stm_= $$; }
   | _SYMB_19 _SYMB_0 Exp _SYMB_1 Stm {  $$ = new SWhile($3, $5); YY_RESULT_Stm_= $$; }
   | _SYMB_16 Stm _SYMB_18 _SYMB_0 Exp _SYMB_1 _SYMB_5 {  $$ = new SRepeat($2, $5); YY_RESULT_Stm_= $$; }
   | _SYMB_13 _SYMB_0 Exp _SYMB_5 Exp _SYMB_1 Stm {  $$ = new SFor($3, $5, $7); YY_RESULT_Stm_= $$; }
-  | _SYMB_13 _SYMB_0 Exp _SYMB_5 Exp _SYMB_5 Exp _SYMB_1 Stm {  $$ = new SFor3($3, $5, $7, $9); YY_RESULT_Stm_= $$; }
+  | _SYMB_13 _SYMB_0 Stm Exp _SYMB_5 Exp _SYMB_1 Stm {  $$ = new SFor3($3, $4, $6, $8); YY_RESULT_Stm_= $$; }
   | _SYMB_14 _SYMB_0 Exp _SYMB_1 Stm {  $$ = new SIf($3, $5); YY_RESULT_Stm_= $$; }
   | _SYMB_14 _SYMB_0 Exp _SYMB_1 Stm _SYMB_12 Stm {  $$ = new SIfElse($3, $5, $7); YY_RESULT_Stm_= $$; }
   | _SYMB_17 Exp _SYMB_5 {  $$ = new SReturn($2); YY_RESULT_Stm_= $$; }

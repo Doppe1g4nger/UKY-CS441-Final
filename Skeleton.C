@@ -100,10 +100,10 @@ void Skeleton::visitSFor3(SFor3 *sfor3)
 {
   /* Code For SFor3 Goes Here */
 
+  sfor3->stm_1->accept(this);
   sfor3->exp_1->accept(this);
   sfor3->exp_2->accept(this);
-  sfor3->exp_3->accept(this);
-  sfor3->stm_->accept(this);
+  sfor3->stm_2->accept(this);
 
 }
 
