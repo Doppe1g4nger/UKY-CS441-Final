@@ -125,6 +125,39 @@ Decl* pDecl(const char *str)
   }
 }
 
+static ListVar* YY_RESULT_ListVar_ = 0;
+ListVar* pListVar(FILE *inp)
+{
+  yy_mylinenumber = 1;
+  initialize_lexer(inp);
+  if (yyparse())
+  { /* Failure */
+    return 0;
+  }
+  else
+  { /* Success */
+    return YY_RESULT_ListVar_;
+  }
+}
+ListVar* pListVar(const char *str)
+{
+  YY_BUFFER_STATE buf;
+  int result;
+  yy_mylinenumber = 1;
+  initialize_lexer(0);
+  buf = yy_scan_string(str);
+  result = yyparse();
+  yy_delete_buffer(buf);
+  if (result)
+  { /* Failure */
+    return 0;
+  }
+  else
+  { /* Success */
+    return YY_RESULT_ListVar_;
+  }
+}
+
 static ListFunction* YY_RESULT_ListFunction_ = 0;
 ListFunction* pListFunction(FILE *inp)
 {
@@ -290,6 +323,39 @@ Stm* pStm(const char *str)
   }
 }
 
+static Var* YY_RESULT_Var_ = 0;
+Var* pVar(FILE *inp)
+{
+  yy_mylinenumber = 1;
+  initialize_lexer(inp);
+  if (yyparse())
+  { /* Failure */
+    return 0;
+  }
+  else
+  { /* Success */
+    return YY_RESULT_Var_;
+  }
+}
+Var* pVar(const char *str)
+{
+  YY_BUFFER_STATE buf;
+  int result;
+  yy_mylinenumber = 1;
+  initialize_lexer(0);
+  buf = yy_scan_string(str);
+  result = yyparse();
+  yy_delete_buffer(buf);
+  if (result)
+  { /* Failure */
+    return 0;
+  }
+  else
+  { /* Success */
+    return YY_RESULT_Var_;
+  }
+}
+
 static Exp* YY_RESULT_Exp_ = 0;
 Exp* pExp(FILE *inp)
 {
@@ -402,11 +468,13 @@ Type* pType(const char *str)
   Program* program_;
   Function* function_;
   Decl* decl_;
+  ListVar* listvar_;
   ListFunction* listfunction_;
   ListStm* liststm_;
   ListDecl* listdecl_;
   ListIdent* listident_;
   Stm* stm_;
+  Var* var_;
   Exp* exp_;
   ListExp* listexp_;
   Type* type_;
@@ -437,11 +505,13 @@ Type* pType(const char *str)
 %type <program_> Program
 %type <function_> Function
 %type <decl_> Decl
+%type <listvar_> ListVar
 %type <listfunction_> ListFunction
 %type <liststm_> ListStm
 %type <listdecl_> ListDecl
 %type <listident_> ListIdent
 %type <stm_> Stm
+%type <var_> Var
 %type <exp_> Exp
 %type <exp_> Exp1
 %type <exp_> Exp2
@@ -461,7 +531,10 @@ Program : ListFunction {  $$ = new Prog($1); YY_RESULT_Program_= $$; }
 ;
 Function : Type _IDENT_ _SYMB_0 ListDecl _SYMB_1 _SYMB_2 ListStm _SYMB_3 {  std::reverse($4->begin(),$4->end()) ;$$ = new Fun($1, $2, $4, $7); YY_RESULT_Function_= $$; } 
 ;
-Decl : Type ListIdent {  std::reverse($2->begin(),$2->end()) ;$$ = new Dec($1, $2); YY_RESULT_Decl_= $$; } 
+Decl : Type ListVar {  std::reverse($2->begin(),$2->end()) ;$$ = new DecA($1, $2); YY_RESULT_Decl_= $$; } 
+;
+ListVar : Var {  $$ = new ListVar() ; $$->push_back($1); YY_RESULT_ListVar_= $$; } 
+  | Var _SYMB_4 ListVar {  $3->push_back($1) ; $$ = $3 ; YY_RESULT_ListVar_= $$; }
 ;
 ListFunction : /* empty */ {  $$ = new ListFunction(); YY_RESULT_ListFunction_= $$; } 
   | ListFunction Function {  $1->push_back($2) ; $$ = $1 ; YY_RESULT_ListFunction_= $$; }
@@ -482,10 +555,13 @@ Stm : Decl _SYMB_5 {  $$ = new SDecl($1); YY_RESULT_Stm_= $$; }
   | _SYMB_19 _SYMB_0 Exp _SYMB_1 Stm {  $$ = new SWhile($3, $5); YY_RESULT_Stm_= $$; }
   | _SYMB_16 Stm _SYMB_18 _SYMB_0 Exp _SYMB_1 _SYMB_5 {  $$ = new SRepeat($2, $5); YY_RESULT_Stm_= $$; }
   | _SYMB_13 _SYMB_0 Exp _SYMB_5 Exp _SYMB_1 Stm {  $$ = new SFor($3, $5, $7); YY_RESULT_Stm_= $$; }
-  | _SYMB_13 _SYMB_0 Exp _SYMB_5 Exp _SYMB_5 Exp _SYMB_1 Stm {  $$ = new SFor3($3, $5, $7, $9); YY_RESULT_Stm_= $$; }
+  | _SYMB_13 _SYMB_0 Stm Exp _SYMB_5 Exp _SYMB_1 Stm {  $$ = new SFor3($3, $4, $6, $8); YY_RESULT_Stm_= $$; }
   | _SYMB_14 _SYMB_0 Exp _SYMB_1 Stm {  $$ = new SIf($3, $5); YY_RESULT_Stm_= $$; }
   | _SYMB_14 _SYMB_0 Exp _SYMB_1 Stm _SYMB_12 Stm {  $$ = new SIfElse($3, $5, $7); YY_RESULT_Stm_= $$; }
   | _SYMB_17 Exp _SYMB_5 {  $$ = new SReturn($2); YY_RESULT_Stm_= $$; }
+;
+Var : _IDENT_ _SYMB_6 Exp {  $$ = new VarAss($1, $3); YY_RESULT_Var_= $$; } 
+  | _IDENT_ {  $$ = new VarDec($1); YY_RESULT_Var_= $$; }
 ;
 Exp : _IDENT_ _SYMB_6 Exp {  $$ = new EAss($1, $3); YY_RESULT_Exp_= $$; } 
   | Exp1 {  $$ = $1; YY_RESULT_Exp_= $$; }

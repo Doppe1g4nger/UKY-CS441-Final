@@ -12,11 +12,12 @@ public:
   void visitFunction(Function* p);
   void visitDecl(Decl* p);
   void visitStm(Stm* p);
+  void visitVar(Var* p);
   void visitExp(Exp* p);
   void visitType(Type* p);
   void visitProg(Prog* p);
   void visitFun(Fun* p);
-  void visitDec(Dec* p);
+  void visitDecA(DecA* p);
   void visitSDecl(SDecl* p);
   void visitSExp(SExp* p);
   void visitSBlock(SBlock* p);
@@ -27,6 +28,8 @@ public:
   void visitSIf(SIf* p);
   void visitSIfElse(SIfElse* p);
   void visitSReturn(SReturn* p);
+  void visitVarAss(VarAss* p);
+  void visitVarDec(VarDec* p);
   void visitEAss(EAss* p);
   void visitELt(ELt* p);
   void visitEAdd(EAdd* p);
@@ -39,6 +42,7 @@ public:
   void visitEDouble(EDouble* p);
   void visitTInt(TInt* p);
   void visitTDouble(TDouble* p);
+  void visitListVar(ListVar* p);
   void visitListFunction(ListFunction* p);
   void visitListStm(ListStm* p);
   void visitListDecl(ListDecl* p);

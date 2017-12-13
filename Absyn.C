@@ -104,50 +104,50 @@ Fun *Fun::clone() const
 
 
 
-/********************   Dec    ********************/
-Dec::Dec(Type *p1, ListIdent *p2)
+/********************   DecA    ********************/
+DecA::DecA(Type *p1, ListVar *p2)
 {
   type_ = p1;
-  listident_ = p2;
+  listvar_ = p2;
 
 }
 
-Dec::Dec(const Dec & other)
+DecA::DecA(const DecA & other)
 {
   type_ = other.type_->clone();
-  listident_ = other.listident_->clone();
+  listvar_ = other.listvar_->clone();
 
 }
 
-Dec &Dec::operator=(const Dec & other)
+DecA &DecA::operator=(const DecA & other)
 {
-  Dec tmp(other);
+  DecA tmp(other);
   swap(tmp);
   return *this;
 }
 
-void Dec::swap(Dec & other)
+void DecA::swap(DecA & other)
 {
   std::swap(type_, other.type_);
-  std::swap(listident_, other.listident_);
+  std::swap(listvar_, other.listvar_);
 
 }
 
-Dec::~Dec()
+DecA::~DecA()
 {
   delete(type_);
-  delete(listident_);
+  delete(listvar_);
 
 }
 
-void Dec::accept(Visitor *v)
+void DecA::accept(Visitor *v)
 {
-  v->visitDec(this);
+  v->visitDecA(this);
 }
 
-Dec *Dec::clone() const
+DecA *DecA::clone() const
 {
-  return new Dec(*this);
+  return new DecA(*this);
 }
 
 
@@ -433,21 +433,21 @@ SFor *SFor::clone() const
 
 
 /********************   SFor3    ********************/
-SFor3::SFor3(Exp *p1, Exp *p2, Exp *p3, Stm *p4)
+SFor3::SFor3(Stm *p1, Exp *p2, Exp *p3, Stm *p4)
 {
-  exp_1 = p1;
-  exp_2 = p2;
-  exp_3 = p3;
-  stm_ = p4;
+  stm_1 = p1;
+  exp_1 = p2;
+  exp_2 = p3;
+  stm_2 = p4;
 
 }
 
 SFor3::SFor3(const SFor3 & other)
 {
+  stm_1 = other.stm_1->clone();
   exp_1 = other.exp_1->clone();
   exp_2 = other.exp_2->clone();
-  exp_3 = other.exp_3->clone();
-  stm_ = other.stm_->clone();
+  stm_2 = other.stm_2->clone();
 
 }
 
@@ -460,19 +460,19 @@ SFor3 &SFor3::operator=(const SFor3 & other)
 
 void SFor3::swap(SFor3 & other)
 {
+  std::swap(stm_1, other.stm_1);
   std::swap(exp_1, other.exp_1);
   std::swap(exp_2, other.exp_2);
-  std::swap(exp_3, other.exp_3);
-  std::swap(stm_, other.stm_);
+  std::swap(stm_2, other.stm_2);
 
 }
 
 SFor3::~SFor3()
 {
+  delete(stm_1);
   delete(exp_1);
   delete(exp_2);
-  delete(exp_3);
-  delete(stm_);
+  delete(stm_2);
 
 }
 
@@ -628,6 +628,96 @@ void SReturn::accept(Visitor *v)
 SReturn *SReturn::clone() const
 {
   return new SReturn(*this);
+}
+
+
+
+/********************   VarAss    ********************/
+VarAss::VarAss(Ident p1, Exp *p2)
+{
+  ident_ = p1;
+  exp_ = p2;
+
+}
+
+VarAss::VarAss(const VarAss & other)
+{
+  ident_ = other.ident_;
+  exp_ = other.exp_->clone();
+
+}
+
+VarAss &VarAss::operator=(const VarAss & other)
+{
+  VarAss tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void VarAss::swap(VarAss & other)
+{
+  std::swap(ident_, other.ident_);
+  std::swap(exp_, other.exp_);
+
+}
+
+VarAss::~VarAss()
+{
+  delete(exp_);
+
+}
+
+void VarAss::accept(Visitor *v)
+{
+  v->visitVarAss(this);
+}
+
+VarAss *VarAss::clone() const
+{
+  return new VarAss(*this);
+}
+
+
+
+/********************   VarDec    ********************/
+VarDec::VarDec(Ident p1)
+{
+  ident_ = p1;
+
+}
+
+VarDec::VarDec(const VarDec & other)
+{
+  ident_ = other.ident_;
+
+}
+
+VarDec &VarDec::operator=(const VarDec & other)
+{
+  VarDec tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void VarDec::swap(VarDec & other)
+{
+  std::swap(ident_, other.ident_);
+
+}
+
+VarDec::~VarDec()
+{
+
+}
+
+void VarDec::accept(Visitor *v)
+{
+  v->visitVarDec(this);
+}
+
+VarDec *VarDec::clone() const
+{
+  return new VarDec(*this);
 }
 
 
@@ -1169,6 +1259,20 @@ TDouble *TDouble::clone() const
 }
 
 
+
+
+/********************   ListVar    ********************/
+
+void ListVar::accept(Visitor *v)
+{
+  v->visitListVar(this);
+}
+
+
+ListVar *ListVar::clone() const
+{
+  return new ListVar(*this);
+}
 
 
 /********************   ListFunction    ********************/

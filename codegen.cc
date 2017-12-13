@@ -103,17 +103,16 @@ void CodeGen::visitFun(Fun *fun)
     code.add(funargs);
 }
 
+//void CodeGen::visitDec(Dec *dec)
+//{
+//  dec->type_->accept(this); // sets currtype
+//  dec->listident_->accept(this); // visitListIdent; uses currtype
+//}
 
-void CodeGen::visitDec(Dec *dec)
+void CodeGen::visitDecA(DecA *deca)
 {
-
-
-    dec->type_->accept(this); // sets currtype
-    dec->listident_->accept(this); // visitListIdent; uses currtype
-
-    //if (symbols[currid]->numargs()!=dec->listdecl_->size())
-      //        throw ArgError("A function does not have the appropriate number of arguments!");
-
+    deca->type_->accept(this);
+    deca->listvar_->accept(this);
 }
 
 void CodeGen::visitSDecl(SDecl *sdecl)
@@ -175,16 +174,41 @@ void CodeGen::visitSFor(SFor *sfor)
 }
 void CodeGen::visitSFor3(SFor3 *sfor)
 {
-    int looploc = code.pos(); //Same as 2 arg for, first statement thrown out
-    sfor->exp_2->accept(this);
+    /*code.add(I_CALL);
+    int callloc = code.pos();
+    code.add(0);
+    code.add(callloc+2);
+
+    code.add(I_PROC);
+    int startloc = code.pos(); // to be filled with number of local variables.
+    code.add(0);
+    code.add(code.pos() + 1); */
+    symbols.enter();
+    //int startvar = symbols.numvars();
+
+    sfor->stm_1->accept(this);
+
+    // Patch up the address of main.
+    //code.at(callloc) = symbols.levelof(currid) + 1;
+
+    int looploc = code.pos();
+    sfor->exp_1->accept(this);
     code.add(I_JR_IF_FALSE);
     code.add(0);
     int patchloc = code.pos() - 1;
-    sfor->stm_->accept(this);
-    sfor->exp_3->accept(this);
+    sfor->stm_2->accept(this);
+    sfor->exp_2->accept(this);
     code.add(I_JR);
     code.add(looploc - (code.pos() - 1));
     code.at(patchloc) = code.pos() - (patchloc - 1);
+
+    // Fill in number of local variables.
+    //code.at(startloc) = symbols.numvars() - startvar;
+    symbols.leave();
+
+    // Return, popping off our parameters.
+    //code.add(I_ENDPPROC);
+    //code.add(0);
 }
 
 void CodeGen::visitSIf(SIf *sif)
@@ -272,6 +296,33 @@ void CodeGen::visitENEq(ENEq *eneq)
     eneq->exp_2->accept(this);
     code.add(I_NOT);
     code.add(I_EQUAL);
+
+void CodeGen::visitVarAss(VarAss *varass)
+{
+    visitIdent(varass->ident_);
+    if (symbols.exists(currid))
+    {
+        throw Redeclared(currid);
+    }
+    symbols.insert(Symbol(currid, currtype, 3 + symbols.numvars() - funargs));
+
+    code.add(I_VARIABLE);
+    code.add(symbols.levelof(currid));
+    code.add(symbols[currid]->address());
+
+    // One copy of the address for the assignment, one for the result.
+    code.add_dup();
+
+    // Generate code for the value of the RHS.
+    varass->exp_->accept(this);
+
+    // Store the value at the computed address.
+    code.add(I_ASSIGN);
+    code.add(1);
+
+    // Dereference the address and return its value.
+    code.add(I_VALUE);
+
 }
 
 void CodeGen::visitELt(ELt *elt)
@@ -453,7 +504,10 @@ void CodeGen::visitListIdent(ListIdent* listident)
     for (ListIdent::iterator i = listident->begin(); i != listident->end(); ++i)
     {
         visitIdent(*i); // sets currid
-
+        if (symbols.exists(currid))
+        {
+            throw Redeclared(currid);
+        }
         // First local variable (numvars = funargs) has address 3, etc.
         // If this ListIdent is actually part of a parameter list, these
         // addresses will be fixed up by visitListDecl.
@@ -461,10 +515,28 @@ void CodeGen::visitListIdent(ListIdent* listident)
     }
 }
 
+void CodeGen::visitVarDec(VarDec* vardec)
+{
+    visitIdent(vardec->ident_);
+    if (symbols.exists(currid))
+    {
+        throw Redeclared(currid);
+    }
+    symbols.insert(Symbol(currid, currtype, 3 + symbols.numvars() - funargs));
+}
+
 void CodeGen::visitListExp(ListExp* listexp)
 {
     // Evaluate each expression in turn, leaving all the values on the stack.
     for (ListExp::iterator i = listexp->begin() ; i != listexp->end() ; ++i)
+    {
+        (*i)->accept(this);
+    }
+}
+
+void CodeGen::visitListVar(ListVar* listvar)
+{
+    for (ListVar::iterator i = listvar->begin() ; i != listvar->end() ; ++i)
     {
         (*i)->accept(this);
     }

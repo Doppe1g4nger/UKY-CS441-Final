@@ -23,11 +23,12 @@ class Program;
 class Function;
 class Decl;
 class Stm;
+class Var;
 class Exp;
 class Type;
 class Prog;
 class Fun;
-class Dec;
+class DecA;
 class SDecl;
 class SExp;
 class SBlock;
@@ -38,6 +39,8 @@ class SFor3;
 class SIf;
 class SIfElse;
 class SReturn;
+class VarAss;
+class VarDec;
 class EAss;
 class ELt;
 class EAdd;
@@ -50,6 +53,7 @@ class EInt;
 class EDouble;
 class TInt;
 class TDouble;
+class ListVar;
 class ListFunction;
 class ListStm;
 class ListDecl;
@@ -66,11 +70,12 @@ public:
   virtual void visitFunction(Function *p) = 0;
   virtual void visitDecl(Decl *p) = 0;
   virtual void visitStm(Stm *p) = 0;
+  virtual void visitVar(Var *p) = 0;
   virtual void visitExp(Exp *p) = 0;
   virtual void visitType(Type *p) = 0;
   virtual void visitProg(Prog *p) = 0;
   virtual void visitFun(Fun *p) = 0;
-  virtual void visitDec(Dec *p) = 0;
+  virtual void visitDecA(DecA *p) = 0;
   virtual void visitSDecl(SDecl *p) = 0;
   virtual void visitSExp(SExp *p) = 0;
   virtual void visitSBlock(SBlock *p) = 0;
@@ -81,6 +86,8 @@ public:
   virtual void visitSIf(SIf *p) = 0;
   virtual void visitSIfElse(SIfElse *p) = 0;
   virtual void visitSReturn(SReturn *p) = 0;
+  virtual void visitVarAss(VarAss *p) = 0;
+  virtual void visitVarDec(VarDec *p) = 0;
   virtual void visitEAss(EAss *p) = 0;
   virtual void visitELt(ELt *p) = 0;
   virtual void visitEAdd(EAdd *p) = 0;
@@ -93,6 +100,7 @@ public:
   virtual void visitEDouble(EDouble *p) = 0;
   virtual void visitTInt(TInt *p) = 0;
   virtual void visitTDouble(TDouble *p) = 0;
+  virtual void visitListVar(ListVar *p) = 0;
   virtual void visitListFunction(ListFunction *p) = 0;
   virtual void visitListStm(ListStm *p) = 0;
   virtual void visitListDecl(ListDecl *p) = 0;
@@ -147,6 +155,13 @@ public:
 
 };
 
+class Var : public Visitable
+{
+public:
+  virtual Var *clone() const = 0;
+
+};
+
 class Exp : public Visitable
 {
 public:
@@ -194,19 +209,19 @@ public:
   void swap(Fun &);
 };
 
-class Dec : public Decl
+class DecA : public Decl
 {
 public:
   Type *type_;
-  ListIdent *listident_;
+  ListVar *listvar_;
 
-  Dec(const Dec &);
-  Dec &operator=(const Dec &);
-  Dec(Type *p1, ListIdent *p2);
-  ~Dec();
+  DecA(const DecA &);
+  DecA &operator=(const DecA &);
+  DecA(Type *p1, ListVar *p2);
+  ~DecA();
   virtual void accept(Visitor *v);
-  virtual Dec *clone() const;
-  void swap(Dec &);
+  virtual DecA *clone() const;
+  void swap(DecA &);
 };
 
 class SDecl : public Stm
@@ -300,14 +315,14 @@ public:
 class SFor3 : public Stm
 {
 public:
+  Stm *stm_1;
   Exp *exp_1;
   Exp *exp_2;
-  Exp *exp_3;
-  Stm *stm_;
+  Stm *stm_2;
 
   SFor3(const SFor3 &);
   SFor3 &operator=(const SFor3 &);
-  SFor3(Exp *p1, Exp *p2, Exp *p3, Stm *p4);
+  SFor3(Stm *p1, Exp *p2, Exp *p3, Stm *p4);
   ~SFor3();
   virtual void accept(Visitor *v);
   virtual SFor3 *clone() const;
@@ -357,6 +372,35 @@ public:
   virtual void accept(Visitor *v);
   virtual SReturn *clone() const;
   void swap(SReturn &);
+};
+
+class VarAss : public Var
+{
+public:
+  Ident ident_;
+  Exp *exp_;
+
+  VarAss(const VarAss &);
+  VarAss &operator=(const VarAss &);
+  VarAss(Ident p1, Exp *p2);
+  ~VarAss();
+  virtual void accept(Visitor *v);
+  virtual VarAss *clone() const;
+  void swap(VarAss &);
+};
+
+class VarDec : public Var
+{
+public:
+  Ident ident_;
+
+  VarDec(const VarDec &);
+  VarDec &operator=(const VarDec &);
+  VarDec(Ident p1);
+  ~VarDec();
+  virtual void accept(Visitor *v);
+  virtual VarDec *clone() const;
+  void swap(VarDec &);
 };
 
 class EAss : public Exp
@@ -532,6 +576,13 @@ public:
 };
 
 
+
+class ListVar : public Visitable, public std::vector<Var*>
+{
+public:
+  virtual void accept(Visitor *v);
+  virtual ListVar *clone() const;
+};
 
 class ListFunction : public Visitable, public std::vector<Function*>
 {
