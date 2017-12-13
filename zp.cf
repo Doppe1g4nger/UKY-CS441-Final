@@ -3,11 +3,12 @@ comment "/*" "*/" ;
 
 Prog. Program  ::= [Function] ;
 Fun.  Function ::= Type Ident "(" [Decl] ")" "{" [Stm] "}" ;
+Global. Function ::= Type Ident ";" ;
 Dec.  Decl     ::= Type [Ident] ;
 
 terminator Function "" ;
 terminator Stm "" ;
-separator  Decl "," ;
+separator  Decl ",";
 separator  nonempty Ident "," ;
 
 SDecl.   Stm ::= Decl ";"  ;
@@ -22,7 +23,12 @@ SIfElse. Stm ::= "if" "(" Exp ")" Stm "else" Stm ;
 SReturn. Stm ::= "return" Exp  ";" ;
 
 EAss.    Exp  ::= Ident "=" Exp ;
+EEq.     Exp1 ::= Exp2 "==" Exp2 ;
+ENEq.    Exp1 ::= Exp2 "!=" Exp2 ;
+EEqLt.   Exp1 ::= Exp2 "<=" Exp2 ;
 ELt.     Exp1 ::= Exp2 "<" Exp2 ;
+EEqGt.	 Exp1 ::= Exp2 ">=" Exp2 ;
+EGt.	 Exp1 ::= Exp2 ">" Exp2 ;
 EAdd.    Exp2 ::= Exp2 "+" Exp3 ;
 ESub.    Exp2 ::= Exp2 "-" Exp3 ;
 EMul.    Exp3 ::= Exp3 "*" Exp4 ;

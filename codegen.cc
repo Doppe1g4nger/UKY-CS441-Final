@@ -37,18 +37,45 @@ void CodeGen::visitProg(Prog *prog)
     code.end_prog();
 }
 
+void CodeGen::visitGlobal(Global *global)
+{
+    global->type_->accept(this); // sets currtype
+    visitIdent(global->ident_);
+    Ident glob_name = currid;
+
+    if (symbols.exists(glob_name))//check that the var name does not already exist
+        throw Redeclared(glob_name);
+
+    symbols.insert(Symbol(glob_name, TY_FUNC, -1, code.pos())); //insert into symbol table
+
+    code.add(I_PROG);	//I_PROG allocates global memory
+    int patchloc = code.pos(); // to be filled with number of global variables.
+    code.add(0);
+    code.add(code.pos() + 1);
+
+    //fill in number of variables
+    int startvar = symbols.numvars();
+    code.at(patchloc) = symbols.numvars() - startvar;
+
+    //return, popping off parameters
+    code.add(I_ENDPPROC);
+    code.add(funargs);
+}
+
+
 void CodeGen::visitFun(Fun *fun)
 {
     fun->type_->accept(this);
-    // return type in currtype, but currently ignored (always int)
 
+    // return type in currtype, but currently ignored (always int)
     visitIdent(fun->ident_);
     Ident fun_name = currid;
 
     if (symbols.exists(fun_name))
         throw Redeclared(fun_name);
 
-    symbols.insert(Symbol(fun_name, TY_FUNC, code.pos()));
+    symbols.insert(Symbol(fun_name, TY_FUNC, funargs, code.pos()));
+
 
     code.add(I_PROC);
     int patchloc = code.pos(); // to be filled with number of local variables.
@@ -56,15 +83,19 @@ void CodeGen::visitFun(Fun *fun)
     code.add(code.pos() + 1); // function code starts next
 
     symbols.enter(); // since parameters are local to the function
+
     // Adds entries to symbol table, sets funargs
     fun->listdecl_->accept(this);
     int startvar = symbols.numvars();
+
 
     // Generate code for function body.
     fun->liststm_->accept(this);
 
     // Fill in number of local variables.
     code.at(patchloc) = symbols.numvars() - startvar;
+    symbols[fun_name]->numargs()=funargs;
+    symbols[fun_name]->setargs(funargs);
     symbols.leave();
 
     // Return, popping off our parameters.
@@ -72,10 +103,17 @@ void CodeGen::visitFun(Fun *fun)
     code.add(funargs);
 }
 
+
 void CodeGen::visitDec(Dec *dec)
 {
+
+
     dec->type_->accept(this); // sets currtype
     dec->listident_->accept(this); // visitListIdent; uses currtype
+
+    //if (symbols[currid]->numargs()!=dec->listdecl_->size())
+      //        throw ArgError("A function does not have the appropriate number of arguments!");
+
 }
 
 void CodeGen::visitSDecl(SDecl *sdecl)
@@ -221,12 +259,51 @@ void CodeGen::visitEAss(EAss *eass)
     code.add(I_VALUE);
 }
 
+void CodeGen::visitEEq(EEq *eeq)
+{
+    eeq->exp_1->accept(this);
+    eeq->exp_2->accept(this);
+    code.add(I_EQUAL);
+}
+
+void CodeGen::visitENEq(ENEq *eneq)
+{
+    eneq->exp_1->accept(this);
+    eneq->exp_2->accept(this);
+    code.add(I_NOT);
+    code.add(I_EQUAL);
+}
+
 void CodeGen::visitELt(ELt *elt)
 {
     elt->exp_1->accept(this);
     elt->exp_2->accept(this);
     code.add(I_LESS);
 }
+
+void CodeGen::visitEEqLt(EEqLt *eeqlt)
+{
+    eeqlt->exp_1->accept(this);
+    eeqlt->exp_2->accept(this);
+    code.add(I_NOT);
+    code.add(I_GREATER);
+}
+
+void CodeGen::visitEGt(EGt *egt)
+{
+    egt->exp_1->accept(this);
+    egt->exp_2->accept(this);
+    code.add(I_GREATER);
+}
+
+void CodeGen::visitEEqGt(EEqGt *eeqgt)
+{
+    eeqgt->exp_1->accept(this);
+    eeqgt->exp_2->accept(this);
+    code.add(I_NOT);
+    code.add(I_LESS);
+}
+
 
 void CodeGen::visitEAdd(EAdd *eadd)
 {
@@ -251,9 +328,13 @@ void CodeGen::visitEMul(EMul *emul)
 
 void CodeGen::visitCall(Call *call)
 {
+    //call->listdecl_->accept(this);
+
     visitIdent(call->ident_);
     if (!symbols.exists(currid))
         throw UnknownFunc(currid);
+
+    //printf("Symbol name: %s\n", symbols[currid]->name());
 
     int level = symbols.levelof(currid);
     int addr = symbols[currid]->address();
@@ -266,6 +347,19 @@ void CodeGen::visitCall(Call *call)
     // Generate code for the expressions (which leaves their values on the
     // stack when executed).
     call->listexp_->accept(this);
+
+    if(symbols[currid]->type()==TY_FUNC && symbols[currid]->numargs()!=-1){
+   	if (symbols[currid]->numargs()!=call->listexp_->size()){
+    	//if (symbols[currid]->numargs()>0)
+		printf("MEOWWW\n");
+    		//throw ArgError("A function does not have the appropriate number of arguments!\n");
+		//printf("%s\n", symbols[currid]->name());
+		}
+		printf("HEY DUMBASS HERE IS YOUR FIRST THING\n");
+		printf("%d\n", symbols[currid]->numargs());
+		printf("HEY DUMBASS HERE IS YOUR SECOND THING\n");
+		printf("%d\n", call->listexp_->size());
+	}
 
     code.add(I_CALL);
     code.add(level);
@@ -338,6 +432,9 @@ void CodeGen::visitListDecl(ListDecl* listdecl)
     // ListDecl is a function parameter list, so we can compute funargs here.
     funargs = listdecl->size();
 
+    //if (symbols[currid]->numargs()!=listdecl->size())
+      //        throw ArgError("A function does not have the appropriate number of arguments!");
+
     int currarg = 0;
     for (ListDecl::iterator i = listdecl->begin() ; i != listdecl->end() ; ++i)
     {
@@ -360,7 +457,7 @@ void CodeGen::visitListIdent(ListIdent* listident)
         // First local variable (numvars = funargs) has address 3, etc.
         // If this ListIdent is actually part of a parameter list, these
         // addresses will be fixed up by visitListDecl.
-        symbols.insert(Symbol(currid, currtype, 3 + symbols.numvars() - funargs));
+        symbols.insert(Symbol(currid, currtype, -1, 3 + symbols.numvars() - funargs));
     }
 }
 

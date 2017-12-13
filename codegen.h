@@ -36,6 +36,12 @@ public:
     Unimplemented(const std::string &what) : logic_error(what) {}
 };
 
+class ArgError : public std::logic_error
+{
+public:
+    ArgError(const std::string &what) : logic_error(what) {}
+};
+
 class CodeGen : public Visitor
 {
 private:
@@ -61,6 +67,7 @@ public:
     void visitType(Type *) {}
 
     void visitProg(Prog *p);
+    void visitGlobal(Global *p);
     void visitFun(Fun *p);
     void visitDec(Dec *p);
     void visitListFunction(ListFunction* p);
@@ -83,7 +90,12 @@ public:
 
     // Expressions
     void visitEAss(EAss *p);
+    void visitEEq(EEq *p);
+    void visitENEq(ENEq *p);
     void visitELt(ELt *p);
+    void visitEEqLt(EEqLt *p);
+    void visitEGt(EGt *p);
+    void visitEEqGt(EEqGt *p);
     void visitEAdd(EAdd *p);
     void visitESub(ESub *p);
     void visitEMul(EMul *p);

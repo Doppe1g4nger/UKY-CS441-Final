@@ -28,7 +28,8 @@ enum type_t {
 class Symbol {
     public:
 	Symbol();
-	Symbol(const std::string &name, type_t type = TY_BAD, int addr = -1);
+//	Symbol(const std::string &name, type_t type = TY_BAD, int addr = -1);
+	Symbol(const std::string &name, type_t type = TY_BAD, int numargs = -1, int address = -1);
 
 	// Accessors
 	virtual const std::string &name() const;
@@ -36,6 +37,11 @@ class Symbol {
 	// Accessor and reference accessor for the type
 	virtual type_t &type();
 	virtual type_t type() const;
+
+	// Accessor and reference accessor for the type
+	virtual int &numargs();
+	virtual int numargs() const;
+	virtual void setargs(int x);
 	
 	// Accessor and reference accessor for the address
 	virtual int &address();
@@ -43,11 +49,13 @@ class Symbol {
 
 	// Comparison operators
 	virtual bool operator<(const Symbol &s) const;
+	virtual bool operator>(const Symbol &s) const;
 	virtual bool operator==(const Symbol &s) const;
 	virtual bool operator!=(const Symbol &s) const;
     private:
 	std::string nam;
 	type_t typ;
+	int num;
 	int addr;
 };
 
