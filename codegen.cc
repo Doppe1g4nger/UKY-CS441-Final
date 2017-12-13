@@ -72,10 +72,16 @@ void CodeGen::visitFun(Fun *fun)
     code.add(funargs);
 }
 
-void CodeGen::visitDec(Dec *dec)
+//void CodeGen::visitDec(Dec *dec)
+//{
+//  dec->type_->accept(this); // sets currtype
+//  dec->listident_->accept(this); // visitListIdent; uses currtype
+//}
+
+void CodeGen::visitDecA(DecA *deca)
 {
-    dec->type_->accept(this); // sets currtype
-    dec->listident_->accept(this); // visitListIdent; uses currtype
+    deca->type_->accept(this);
+    deca->listvar_->accept(this);
 }
 
 void CodeGen::visitSDecl(SDecl *sdecl)
@@ -221,6 +227,34 @@ void CodeGen::visitEAss(EAss *eass)
     code.add(I_VALUE);
 }
 
+void CodeGen::visitVarAss(VarAss *varass)
+{
+    visitIdent(varass->ident_);
+    if (symbols.exists(currid))
+    {
+        throw Redeclared(currid);
+    }
+    symbols.insert(Symbol(currid, currtype, 3 + symbols.numvars() - funargs));
+
+    code.add(I_VARIABLE);
+    code.add(symbols.levelof(currid));
+    code.add(symbols[currid]->address());
+
+    // One copy of the address for the assignment, one for the result.
+    code.add_dup();
+
+    // Generate code for the value of the RHS.
+    varass->exp_->accept(this);
+
+    // Store the value at the computed address.
+    code.add(I_ASSIGN);
+    code.add(1);
+
+    // Dereference the address and return its value.
+    code.add(I_VALUE);
+
+}
+
 void CodeGen::visitELt(ELt *elt)
 {
     elt->exp_1->accept(this);
@@ -356,7 +390,10 @@ void CodeGen::visitListIdent(ListIdent* listident)
     for (ListIdent::iterator i = listident->begin(); i != listident->end(); ++i)
     {
         visitIdent(*i); // sets currid
-
+        if (symbols.exists(currid))
+        {
+            throw Redeclared(currid);
+        }
         // First local variable (numvars = funargs) has address 3, etc.
         // If this ListIdent is actually part of a parameter list, these
         // addresses will be fixed up by visitListDecl.
@@ -364,10 +401,28 @@ void CodeGen::visitListIdent(ListIdent* listident)
     }
 }
 
+void CodeGen::visitVarDec(VarDec* vardec)
+{
+    visitIdent(vardec->ident_);
+    if (symbols.exists(currid))
+    {
+        throw Redeclared(currid);
+    }
+    symbols.insert(Symbol(currid, currtype, 3 + symbols.numvars() - funargs));
+}
+
 void CodeGen::visitListExp(ListExp* listexp)
 {
     // Evaluate each expression in turn, leaving all the values on the stack.
     for (ListExp::iterator i = listexp->begin() ; i != listexp->end() ; ++i)
+    {
+        (*i)->accept(this);
+    }
+}
+
+void CodeGen::visitListVar(ListVar* listvar)
+{
+    for (ListVar::iterator i = listvar->begin() ; i != listvar->end() ; ++i)
     {
         (*i)->accept(this);
     }

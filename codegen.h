@@ -59,15 +59,20 @@ public:
     void visitStm(Stm *) {}
     void visitExp(Exp *) {}
     void visitType(Type *) {}
+    void visitVar(Var *) {}
 
+    void visitVarAss(VarAss *p);
+    void visitVarDec(VarDec *p);
     void visitProg(Prog *p);
     void visitFun(Fun *p);
-    void visitDec(Dec *p);
+    //void visitDec(Dec *p);
+    void visitDecA(DecA *p);
     void visitListFunction(ListFunction* p);
     void visitListExp(ListExp* p);
     void visitListStm(ListStm* p);
     void visitListDecl(ListDecl* p);
     void visitListIdent(ListIdent* p);
+    void visitListVar(ListVar* p);
 
     // Statements
     void visitSDecl(SDecl *p);

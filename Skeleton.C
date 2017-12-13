@@ -12,6 +12,7 @@ void Skeleton::visitProgram(Program* t) {} //abstract class
 void Skeleton::visitFunction(Function* t) {} //abstract class
 void Skeleton::visitDecl(Decl* t) {} //abstract class
 void Skeleton::visitStm(Stm* t) {} //abstract class
+void Skeleton::visitVar(Var* t) {} //abstract class
 void Skeleton::visitExp(Exp* t) {} //abstract class
 void Skeleton::visitType(Type* t) {} //abstract class
 
@@ -34,12 +35,12 @@ void Skeleton::visitFun(Fun *fun)
 
 }
 
-void Skeleton::visitDec(Dec *dec)
+void Skeleton::visitDecA(DecA *deca)
 {
-  /* Code For Dec Goes Here */
+  /* Code For DecA Goes Here */
 
-  dec->type_->accept(this);
-  dec->listident_->accept(this);
+  deca->type_->accept(this);
+  deca->listvar_->accept(this);
 
 }
 
@@ -130,6 +131,23 @@ void Skeleton::visitSReturn(SReturn *sreturn)
   /* Code For SReturn Goes Here */
 
   sreturn->exp_->accept(this);
+
+}
+
+void Skeleton::visitVarAss(VarAss *varass)
+{
+  /* Code For VarAss Goes Here */
+
+  visitIdent(varass->ident_);
+  varass->exp_->accept(this);
+
+}
+
+void Skeleton::visitVarDec(VarDec *vardec)
+{
+  /* Code For VarDec Goes Here */
+
+  visitIdent(vardec->ident_);
 
 }
 
@@ -233,6 +251,14 @@ void Skeleton::visitTDouble(TDouble *tdouble)
 
 }
 
+
+void Skeleton::visitListVar(ListVar* listvar)
+{
+  for (ListVar::iterator i = listvar->begin() ; i != listvar->end() ; ++i)
+  {
+    (*i)->accept(this);
+  }
+}
 
 void Skeleton::visitListFunction(ListFunction* listfunction)
 {

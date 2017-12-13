@@ -3,8 +3,9 @@ comment "/*" "*/" ;
 
 Prog. Program  ::= [Function] ;
 Fun.  Function ::= Type Ident "(" [Decl] ")" "{" [Stm] "}" ;
-Dec.  Decl     ::= Type [Ident] ;
+DecA. Decl     ::= Type [Var] ;
 
+separator  nonempty Var "," ;
 terminator Function "" ;
 terminator Stm "" ;
 separator  Decl "," ;
@@ -21,6 +22,8 @@ SIf.     Stm ::= "if" "(" Exp ")" Stm ;
 SIfElse. Stm ::= "if" "(" Exp ")" Stm "else" Stm ;
 SReturn. Stm ::= "return" Exp  ";" ;
 
+VarAss.  Var  ::= Ident "=" Exp ;
+VarDec.  Var  ::= Ident ;
 EAss.    Exp  ::= Ident "=" Exp ;
 ELt.     Exp1 ::= Exp2 "<" Exp2 ;
 EAdd.    Exp2 ::= Exp2 "+" Exp3 ;

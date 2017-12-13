@@ -34,7 +34,8 @@ void render(char* s);
   void visitFunction(Function *p); /* abstract class */
   void visitFun(Fun *p);
   void visitDecl(Decl *p); /* abstract class */
-  void visitDec(Dec *p);
+  void visitDecA(DecA *p);
+  void visitListVar(ListVar* p);
   void visitListFunction(ListFunction* p);
   void visitListStm(ListStm* p);
   void visitListDecl(ListDecl* p);
@@ -50,6 +51,9 @@ void render(char* s);
   void visitSIf(SIf *p);
   void visitSIfElse(SIfElse *p);
   void visitSReturn(SReturn *p);
+  void visitVar(Var *p); /* abstract class */
+  void visitVarAss(VarAss *p);
+  void visitVarDec(VarDec *p);
   void visitExp(Exp *p); /* abstract class */
   void visitEAss(EAss *p);
   void visitELt(ELt *p);
@@ -143,7 +147,8 @@ class ShowAbsyn : public Visitor
   void visitFunction(Function *p); /* abstract class */
   void visitFun(Fun *p);
   void visitDecl(Decl *p); /* abstract class */
-  void visitDec(Dec *p);
+  void visitDecA(DecA *p);
+  void visitListVar(ListVar* p);
   void visitListFunction(ListFunction* p);
   void visitListStm(ListStm* p);
   void visitListDecl(ListDecl* p);
@@ -159,6 +164,9 @@ class ShowAbsyn : public Visitor
   void visitSIf(SIf *p);
   void visitSIfElse(SIfElse *p);
   void visitSReturn(SReturn *p);
+  void visitVar(Var *p); /* abstract class */
+  void visitVarAss(VarAss *p);
+  void visitVarDec(VarDec *p);
   void visitExp(Exp *p); /* abstract class */
   void visitEAss(EAss *p);
   void visitELt(ELt *p);

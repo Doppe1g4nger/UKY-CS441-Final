@@ -104,50 +104,50 @@ Fun *Fun::clone() const
 
 
 
-/********************   Dec    ********************/
-Dec::Dec(Type *p1, ListIdent *p2)
+/********************   DecA    ********************/
+DecA::DecA(Type *p1, ListVar *p2)
 {
   type_ = p1;
-  listident_ = p2;
+  listvar_ = p2;
 
 }
 
-Dec::Dec(const Dec & other)
+DecA::DecA(const DecA & other)
 {
   type_ = other.type_->clone();
-  listident_ = other.listident_->clone();
+  listvar_ = other.listvar_->clone();
 
 }
 
-Dec &Dec::operator=(const Dec & other)
+DecA &DecA::operator=(const DecA & other)
 {
-  Dec tmp(other);
+  DecA tmp(other);
   swap(tmp);
   return *this;
 }
 
-void Dec::swap(Dec & other)
+void DecA::swap(DecA & other)
 {
   std::swap(type_, other.type_);
-  std::swap(listident_, other.listident_);
+  std::swap(listvar_, other.listvar_);
 
 }
 
-Dec::~Dec()
+DecA::~DecA()
 {
   delete(type_);
-  delete(listident_);
+  delete(listvar_);
 
 }
 
-void Dec::accept(Visitor *v)
+void DecA::accept(Visitor *v)
 {
-  v->visitDec(this);
+  v->visitDecA(this);
 }
 
-Dec *Dec::clone() const
+DecA *DecA::clone() const
 {
-  return new Dec(*this);
+  return new DecA(*this);
 }
 
 
@@ -628,6 +628,96 @@ void SReturn::accept(Visitor *v)
 SReturn *SReturn::clone() const
 {
   return new SReturn(*this);
+}
+
+
+
+/********************   VarAss    ********************/
+VarAss::VarAss(Ident p1, Exp *p2)
+{
+  ident_ = p1;
+  exp_ = p2;
+
+}
+
+VarAss::VarAss(const VarAss & other)
+{
+  ident_ = other.ident_;
+  exp_ = other.exp_->clone();
+
+}
+
+VarAss &VarAss::operator=(const VarAss & other)
+{
+  VarAss tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void VarAss::swap(VarAss & other)
+{
+  std::swap(ident_, other.ident_);
+  std::swap(exp_, other.exp_);
+
+}
+
+VarAss::~VarAss()
+{
+  delete(exp_);
+
+}
+
+void VarAss::accept(Visitor *v)
+{
+  v->visitVarAss(this);
+}
+
+VarAss *VarAss::clone() const
+{
+  return new VarAss(*this);
+}
+
+
+
+/********************   VarDec    ********************/
+VarDec::VarDec(Ident p1)
+{
+  ident_ = p1;
+
+}
+
+VarDec::VarDec(const VarDec & other)
+{
+  ident_ = other.ident_;
+
+}
+
+VarDec &VarDec::operator=(const VarDec & other)
+{
+  VarDec tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void VarDec::swap(VarDec & other)
+{
+  std::swap(ident_, other.ident_);
+
+}
+
+VarDec::~VarDec()
+{
+
+}
+
+void VarDec::accept(Visitor *v)
+{
+  v->visitVarDec(this);
+}
+
+VarDec *VarDec::clone() const
+{
+  return new VarDec(*this);
 }
 
 
@@ -1169,6 +1259,20 @@ TDouble *TDouble::clone() const
 }
 
 
+
+
+/********************   ListVar    ********************/
+
+void ListVar::accept(Visitor *v)
+{
+  v->visitListVar(this);
+}
+
+
+ListVar *ListVar::clone() const
+{
+  return new ListVar(*this);
+}
 
 
 /********************   ListFunction    ********************/
