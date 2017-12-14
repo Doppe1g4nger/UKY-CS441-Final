@@ -72,7 +72,7 @@ void CodeGen::visitFun(Fun *fun)
     Ident fun_name = currid;
     currfun=currid;
     fun_type = currtype;
-	//printf("got into fun once");
+
     if (symbols.exists(fun_name))
         throw Redeclared(fun_name);
 
@@ -88,12 +88,6 @@ void CodeGen::visitFun(Fun *fun)
 
     // Adds entries to symbol table, sets funargs
     fun->listdecl_->accept(this);
-	if(symbols[currfun]->argtype()==TY_BAD)
-		printf("THE TYPE IS BAD \n");
-	if(symbols[currfun]->argtype()==TY_INT)
-		printf("THE TYPE IS INT \n");
-	if(symbols[currfun]->argtype()==TY_DOUBLE)
-		printf("THE TYPE IS DOUBLE \n");
     int startvar = symbols.numvars();
 
     // Generate code for function body.
@@ -109,12 +103,6 @@ void CodeGen::visitFun(Fun *fun)
     code.add(I_ENDPPROC);
     code.add(funargs);
 }
-
-//void CodeGen::visitDec(Dec *dec)
-//{
-//  dec->type_->accept(this); // sets currtype
-//  dec->listident_->accept(this); // visitListIdent; uses currtype
-//}
 
 void CodeGen::visitDecA(DecA *deca)
 {
@@ -410,11 +398,11 @@ void CodeGen::visitEMul(EMul *emul)
 
 void CodeGen::visitCall(Call *call)
 {
-    //call->listdecl_->accept(this);
-
     visitIdent(call->ident_);
     if (!symbols.exists(currid))
         throw UnknownFunc(currid);
+
+    currfun=currid;
 
     //printf("Symbol name: %s\n", symbols[currid]->name());
 
@@ -432,7 +420,6 @@ void CodeGen::visitCall(Call *call)
 
     if(symbols[currid]->type()==TY_FUNC && symbols[currid]->numargs()!=-1){
    	if (symbols[currid]->numargs()!=call->listexp_->size()){
-    	//if (symbols[currid]->numargs()>0)
 		printf("MEOWWW\n");
     		//throw ArgError("A function does not have the appropriate number of arguments!\n");
 		//printf("%s\n", symbols[currid]->name());
@@ -443,18 +430,6 @@ void CodeGen::visitCall(Call *call)
 		printf("%d\n", call->listexp_->size());
 	}
 
-    if(symbols[currid]->type()==TY_FUNC && symbols[currid]->numargs()!=-1){
-
-    //	if (symbols[currid]->type()!=TY_INT || symbols[currid]->type()!=TY_DOUBLE){
-    //		printf("meowwwww");
-    //		throw ArgError("A function does not have the appropriate tyoe of arguments!\n");
-    //		}
-
-	 if(symbols[currid]->numargs()==1 && symbols[currid]->type()!=symbols[currid]->argtype()){
-		printf("meow2");
-    		throw ArgError("A function does not have the appropriate type of arguments!\n");
-		}
-	}
 
     code.add(I_CALL);
     code.add(level);
@@ -536,7 +511,6 @@ void CodeGen::visitListDecl(ListDecl* listdecl)
         // (currarg = nargs - 1) has address -1.
         symbols[currid]->address() = currarg - funargs;
 	symbols[currfun]->argtype() = currtype;
-	//printf("got into visitlistdecl once");
     }
 }
 
@@ -574,6 +548,28 @@ void CodeGen::visitListExp(ListExp* listexp)
     for (ListExp::iterator i = listexp->begin() ; i != listexp->end() ; ++i)
     {
         (*i)->accept(this);
+
+    if(symbols[currfun]->type()==TY_FUNC && symbols[currfun]->numargs()!=-1){
+
+	//if(symbols[currfun]->argtype()==TY_BAD)
+	//	printf("THE CURRFUN TYPE IS BAD \n");
+	//if(symbols[currfun]->argtype()==TY_INT)
+	//	printf("THE CURRFUN TYPE IS INT \n");
+	//if(symbols[currfun]->argtype()==TY_DOUBLE)
+	//	printf("THE CURRFUN TYPE IS DOUBLE \n");
+
+	//if(currtype==TY_BAD)
+	//	printf("THE expression TYPE IS BAD \n");
+	//if(currtype==TY_INT)
+	//	printf("THE expression TYPE IS INT \n");
+	//if(currtype==TY_DOUBLE)
+	//	printf("THE expression TYPE IS DOUBLE \n");
+
+	 if(symbols[currfun]->argtype()!=currtype){
+    		throw ArgError("A function does not have the appropriate type of arguments!\n");
+		}
+	}
+
     }
 }
 
