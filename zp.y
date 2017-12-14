@@ -488,6 +488,7 @@ Type* pType(const char *str)
 %token _SYMB_4    //   ;
 %token _SYMB_5    //   ,
 %token _SYMB_6    //   =
+<<<<<<< HEAD
 %token _SYMB_7    //   &&
 %token _SYMB_8    //   ||
 %token _SYMB_9    //   !
@@ -509,6 +510,26 @@ Type* pType(const char *str)
 %token _SYMB_25    //   return
 %token _SYMB_26    //   until
 %token _SYMB_27    //   while
+=======
+%token _SYMB_7    //   ==
+%token _SYMB_8    //   !=
+%token _SYMB_9    //   <=
+%token _SYMB_10    //   <
+%token _SYMB_11    //   >=
+%token _SYMB_12    //   >
+%token _SYMB_13    //   +
+%token _SYMB_14    //   -
+%token _SYMB_15    //   *
+%token _SYMB_16    //   double
+%token _SYMB_17    //   else
+%token _SYMB_18    //   for
+%token _SYMB_19    //   if
+%token _SYMB_20    //   int
+%token _SYMB_21    //   repeat
+%token _SYMB_22    //   return
+%token _SYMB_23    //   until
+%token _SYMB_24    //   while
+>>>>>>> 1be0693fca677c0da5896a2c68f9642a1a33355a
 
 %type <program_> Program
 %type <function_> Function
@@ -561,6 +582,7 @@ ListIdent : _IDENT_ {  $$ = new ListIdent() ; $$->push_back($1); YY_RESULT_ListI
 Stm : Decl _SYMB_4 {  $$ = new SDecl($1); YY_RESULT_Stm_= $$; } 
   | Exp _SYMB_4 {  $$ = new SExp($1); YY_RESULT_Stm_= $$; }
   | _SYMB_2 ListStm _SYMB_3 {  $$ = new SBlock($2); YY_RESULT_Stm_= $$; }
+<<<<<<< HEAD
   | _SYMB_27 _SYMB_0 Exp _SYMB_1 Stm {  $$ = new SWhile($3, $5); YY_RESULT_Stm_= $$; }
   | _SYMB_24 Stm _SYMB_26 _SYMB_0 Exp _SYMB_1 _SYMB_4 {  $$ = new SRepeat($2, $5); YY_RESULT_Stm_= $$; }
   | _SYMB_21 _SYMB_0 Exp _SYMB_4 Exp _SYMB_1 Stm {  $$ = new SFor($3, $5, $7); YY_RESULT_Stm_= $$; }
@@ -568,6 +590,15 @@ Stm : Decl _SYMB_4 {  $$ = new SDecl($1); YY_RESULT_Stm_= $$; }
   | _SYMB_22 _SYMB_0 Exp _SYMB_1 Stm {  $$ = new SIf($3, $5); YY_RESULT_Stm_= $$; }
   | _SYMB_22 _SYMB_0 Exp _SYMB_1 Stm _SYMB_20 Stm {  $$ = new SIfElse($3, $5, $7); YY_RESULT_Stm_= $$; }
   | _SYMB_25 Exp _SYMB_4 {  $$ = new SReturn($2); YY_RESULT_Stm_= $$; }
+=======
+  | _SYMB_24 _SYMB_0 Exp _SYMB_1 Stm {  $$ = new SWhile($3, $5); YY_RESULT_Stm_= $$; }
+  | _SYMB_21 Stm _SYMB_23 _SYMB_0 Exp _SYMB_1 _SYMB_4 {  $$ = new SRepeat($2, $5); YY_RESULT_Stm_= $$; }
+  | _SYMB_18 _SYMB_0 Exp _SYMB_4 Exp _SYMB_1 Stm {  $$ = new SFor($3, $5, $7); YY_RESULT_Stm_= $$; }
+  | _SYMB_18 _SYMB_0 Stm Exp _SYMB_4 Exp _SYMB_1 Stm {  $$ = new SFor3($3, $4, $6, $8); YY_RESULT_Stm_= $$; }
+  | _SYMB_19 _SYMB_0 Exp _SYMB_1 Stm {  $$ = new SIf($3, $5); YY_RESULT_Stm_= $$; }
+  | _SYMB_19 _SYMB_0 Exp _SYMB_1 Stm _SYMB_17 Stm {  $$ = new SIfElse($3, $5, $7); YY_RESULT_Stm_= $$; }
+  | _SYMB_22 Exp _SYMB_4 {  $$ = new SReturn($2); YY_RESULT_Stm_= $$; }
+>>>>>>> 1be0693fca677c0da5896a2c68f9642a1a33355a
 ;
 Var : _IDENT_ _SYMB_6 Exp {  $$ = new VarAss($1, $3); YY_RESULT_Var_= $$; } 
   | _IDENT_ {  $$ = new VarDec($1); YY_RESULT_Var_= $$; }
@@ -575,6 +606,7 @@ Var : _IDENT_ _SYMB_6 Exp {  $$ = new VarAss($1, $3); YY_RESULT_Var_= $$; }
 Exp : _IDENT_ _SYMB_6 Exp {  $$ = new EAss($1, $3); YY_RESULT_Exp_= $$; } 
   | Exp1 {  $$ = $1; YY_RESULT_Exp_= $$; }
 ;
+<<<<<<< HEAD
 Exp1 : Exp2 _SYMB_7 Exp2 {  $$ = new EAnd($1, $3); YY_RESULT_Exp_= $$; } 
   | Exp2 _SYMB_8 Exp2 {  $$ = new EOr($1, $3); YY_RESULT_Exp_= $$; }
   | _SYMB_9 Exp2 {  $$ = new ENot($2); YY_RESULT_Exp_= $$; }
@@ -591,6 +623,21 @@ Exp2 : Exp2 _SYMB_16 Exp3 {  $$ = new EAdd($1, $3); YY_RESULT_Exp_= $$; }
   | Exp3 {  $$ = $1; YY_RESULT_Exp_= $$; }
 ;
 Exp3 : Exp3 _SYMB_18 Exp4 {  $$ = new EMul($1, $3); YY_RESULT_Exp_= $$; } 
+=======
+Exp1 : Exp2 _SYMB_7 Exp2 {  $$ = new EEq($1, $3); YY_RESULT_Exp_= $$; } 
+  | Exp2 _SYMB_8 Exp2 {  $$ = new ENEq($1, $3); YY_RESULT_Exp_= $$; }
+  | Exp2 _SYMB_9 Exp2 {  $$ = new EEqLt($1, $3); YY_RESULT_Exp_= $$; }
+  | Exp2 _SYMB_10 Exp2 {  $$ = new ELt($1, $3); YY_RESULT_Exp_= $$; }
+  | Exp2 _SYMB_11 Exp2 {  $$ = new EEqGt($1, $3); YY_RESULT_Exp_= $$; }
+  | Exp2 _SYMB_12 Exp2 {  $$ = new EGt($1, $3); YY_RESULT_Exp_= $$; }
+  | Exp2 {  $$ = $1; YY_RESULT_Exp_= $$; }
+;
+Exp2 : Exp2 _SYMB_13 Exp3 {  $$ = new EAdd($1, $3); YY_RESULT_Exp_= $$; } 
+  | Exp2 _SYMB_14 Exp3 {  $$ = new ESub($1, $3); YY_RESULT_Exp_= $$; }
+  | Exp3 {  $$ = $1; YY_RESULT_Exp_= $$; }
+;
+Exp3 : Exp3 _SYMB_15 Exp4 {  $$ = new EMul($1, $3); YY_RESULT_Exp_= $$; } 
+>>>>>>> 1be0693fca677c0da5896a2c68f9642a1a33355a
   | Exp4 {  $$ = $1; YY_RESULT_Exp_= $$; }
 ;
 Exp4 : _IDENT_ _SYMB_0 ListExp _SYMB_1 {  std::reverse($3->begin(),$3->end()) ;$$ = new Call($1, $3); YY_RESULT_Exp_= $$; } 
@@ -604,7 +651,12 @@ ListExp : /* empty */ {  $$ = new ListExp(); YY_RESULT_ListExp_= $$; }
   | Exp {  $$ = new ListExp() ; $$->push_back($1); YY_RESULT_ListExp_= $$; }
   | Exp _SYMB_5 ListExp {  $3->push_back($1) ; $$ = $3 ; YY_RESULT_ListExp_= $$; }
 ;
+<<<<<<< HEAD
 Type : _SYMB_23 {  $$ = new TInt(); YY_RESULT_Type_= $$; } 
   | _SYMB_19 {  $$ = new TDouble(); YY_RESULT_Type_= $$; }
+=======
+Type : _SYMB_20 {  $$ = new TInt(); YY_RESULT_Type_= $$; } 
+  | _SYMB_16 {  $$ = new TDouble(); YY_RESULT_Type_= $$; }
+>>>>>>> 1be0693fca677c0da5896a2c68f9642a1a33355a
 ;
 

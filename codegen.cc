@@ -65,12 +65,12 @@ void CodeGen::visitGlobal(Global *global)
 
 void CodeGen::visitFun(Fun *fun)
 {
-    fun->type_->accept(this);
-
+    fun->type_->accept(this); //sets currtype
+    
     // return type in currtype, but currently ignored (always int)
     visitIdent(fun->ident_);
     Ident fun_name = currid;
-
+    fun_type = currtype;
     if (symbols.exists(fun_name))
         throw Redeclared(fun_name);
 
@@ -249,6 +249,10 @@ void CodeGen::visitSReturn(SReturn *sreturn)
     code.add(-(funargs+1));
     //code.add(I_SWAP);
     sreturn->exp_->accept(this); // Evaluate expression after variable assignment to avoid swap
+    if (fun_type != currtype)
+    {
+        throw TypeError(currid);
+    }
     code.add(I_ASSIGN);
     code.add(1);
 
@@ -370,8 +374,8 @@ void CodeGen::visitEEqGt(EEqGt *eeqgt)
 {
     eeqgt->exp_1->accept(this);
     eeqgt->exp_2->accept(this);
-    code.add(I_NOT);
     code.add(I_LESS);
+    code.add(I_NOT);
 }
 
 
@@ -586,7 +590,8 @@ void CodeGen::visitChar(Char x)
 
 void CodeGen::visitDouble(Double x)
 {
-    throw Unimplemented("doubles are unimplemented");
+    code.add(R_CONSTANT);
+    code.add(x);
 }
 
 void CodeGen::visitString(String x)
@@ -598,5 +603,3 @@ void CodeGen::visitIdent(Ident x)
 {
     currid = x;
 }
-
-

@@ -95,6 +95,7 @@ Type* pType(const char *str);
 #define _SYMB_22 281
 #define _SYMB_23 282
 #define _SYMB_24 283
+<<<<<<< HEAD
 #define _SYMB_25 284
 #define _SYMB_26 285
 #define _SYMB_27 286
@@ -102,6 +103,12 @@ Type* pType(const char *str);
 #define _INTEGER_ 288
 #define _DOUBLE_ 289
 #define _IDENT_ 290
+=======
+#define _STRING_ 284
+#define _INTEGER_ 285
+#define _DOUBLE_ 286
+#define _IDENT_ 287
+>>>>>>> 1be0693fca677c0da5896a2c68f9642a1a33355a
 
 extern YYSTYPE yylval;
 

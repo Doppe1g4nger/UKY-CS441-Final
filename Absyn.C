@@ -816,6 +816,7 @@ EAss *EAss::clone() const
 
 
 
+<<<<<<< HEAD
 /********************   EAnd    ********************/
 EAnd::EAnd(Exp *p1, Exp *p2)
 {
@@ -956,6 +957,8 @@ ENot *ENot::clone() const
 
 
 
+=======
+>>>>>>> 1be0693fca677c0da5896a2c68f9642a1a33355a
 /********************   EEq    ********************/
 EEq::EEq(Exp *p1, Exp *p2)
 {

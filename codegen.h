@@ -42,6 +42,14 @@ public:
     ArgError(const std::string &what) : logic_error(what) {}
 };
 
+class TypeError : public std::logic_error
+{
+public:
+    TypeError(const std::string &what) 
+        : logic_error("Error: Type of" + what + "Does not match") 
+        {}
+};
+
 class CodeGen : public Visitor
 {
 private:
@@ -49,10 +57,12 @@ private:
     type_t currtype;     // type from last visitT{Int,Double}
     PstackCode code;     // buffer to hold generated code
     SymbolTable symbols; // symbol table
-    int funargs;         // number of parameters in current function.
+    int funargs;
+    type_t fun_type;
+                         // number of parameters in current function.
 public:
     CodeGen()
-        : currid(""), currtype(TY_BAD), code(), symbols(), funargs(-1)
+        : currid(""), currtype(TY_BAD), code(), symbols(), funargs(-1), fun_type(TY_BAD)
     {}
     PstackCode generate(Visitable *vis);
 
