@@ -70,7 +70,9 @@ void CodeGen::visitFun(Fun *fun)
     // return type in currtype, but currently ignored (always int)
     visitIdent(fun->ident_);
     Ident fun_name = currid;
+    currfun=currid;
     fun_type = currtype;
+	//printf("got into fun once");
     if (symbols.exists(fun_name))
         throw Redeclared(fun_name);
 
@@ -86,6 +88,12 @@ void CodeGen::visitFun(Fun *fun)
 
     // Adds entries to symbol table, sets funargs
     fun->listdecl_->accept(this);
+	if(symbols[currfun]->argtype()==TY_BAD)
+		printf("THE TYPE IS BAD \n");
+	if(symbols[currfun]->argtype()==TY_INT)
+		printf("THE TYPE IS INT \n");
+	if(symbols[currfun]->argtype()==TY_DOUBLE)
+		printf("THE TYPE IS DOUBLE \n");
     int startvar = symbols.numvars();
 
     // Generate code for function body.
@@ -442,7 +450,7 @@ void CodeGen::visitCall(Call *call)
     //		throw ArgError("A function does not have the appropriate tyoe of arguments!\n");
     //		}
 
-	 if(symbols[currid]->type()!=currtype){
+	 if(symbols[currid]->numargs()==1 && symbols[currid]->type()!=symbols[currid]->argtype()){
 		printf("meow2");
     		throw ArgError("A function does not have the appropriate type of arguments!\n");
 		}
@@ -527,6 +535,8 @@ void CodeGen::visitListDecl(ListDecl* listdecl)
         // The first argument (currarg = 0) has address -nargs; the last
         // (currarg = nargs - 1) has address -1.
         symbols[currid]->address() = currarg - funargs;
+	symbols[currfun]->argtype() = currtype;
+	//printf("got into visitlistdecl once");
     }
 }
 

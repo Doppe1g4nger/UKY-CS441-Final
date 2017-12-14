@@ -54,6 +54,7 @@ class CodeGen : public Visitor
 {
 private:
     Ident currid;        // identifier from last visitIdent
+    Ident currfun;
     type_t currtype;     // type from last visitT{Int,Double}
     PstackCode code;     // buffer to hold generated code
     SymbolTable symbols; // symbol table
