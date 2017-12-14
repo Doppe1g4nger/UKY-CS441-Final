@@ -43,12 +43,9 @@ class SReturn;
 class VarAss;
 class VarDec;
 class EAss;
-<<<<<<< HEAD
 class EAnd;
 class EOr;
 class ENot;
-=======
->>>>>>> 1be0693fca677c0da5896a2c68f9642a1a33355a
 class EEq;
 class ENEq;
 class EEqLt;
@@ -102,12 +99,9 @@ public:
   virtual void visitVarAss(VarAss *p) = 0;
   virtual void visitVarDec(VarDec *p) = 0;
   virtual void visitEAss(EAss *p) = 0;
-<<<<<<< HEAD
   virtual void visitEAnd(EAnd *p) = 0;
   virtual void visitEOr(EOr *p) = 0;
   virtual void visitENot(ENot *p) = 0;
-=======
->>>>>>> 1be0693fca677c0da5896a2c68f9642a1a33355a
   virtual void visitEEq(EEq *p) = 0;
   virtual void visitENEq(ENEq *p) = 0;
   virtual void visitEEqLt(EEqLt *p) = 0;
@@ -457,7 +451,6 @@ public:
   void swap(EAss &);
 };
 
-<<<<<<< HEAD
 class EAnd : public Exp
 {
 public:
@@ -502,8 +495,6 @@ public:
   void swap(ENot &);
 };
 
-=======
->>>>>>> 1be0693fca677c0da5896a2c68f9642a1a33355a
 class EEq : public Exp
 {
 public:

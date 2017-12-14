@@ -407,7 +407,6 @@ void PrintAbsyn::visitEAss(EAss* p)
   _i_ = oldi;
 }
 
-<<<<<<< HEAD
 void PrintAbsyn::visitEAnd(EAnd* p)
 {
   int oldi = _i_;
@@ -449,8 +448,6 @@ void PrintAbsyn::visitENot(ENot* p)
   _i_ = oldi;
 }
 
-=======
->>>>>>> 1be0693fca677c0da5896a2c68f9642a1a33355a
 void PrintAbsyn::visitEEq(EEq* p)
 {
   int oldi = _i_;
@@ -993,7 +990,6 @@ void ShowAbsyn::visitEAss(EAss* p)
   bufAppend(']');
   bufAppend(')');
 }
-<<<<<<< HEAD
 void ShowAbsyn::visitEAnd(EAnd* p)
 {
   bufAppend('(');
@@ -1024,8 +1020,6 @@ void ShowAbsyn::visitENot(ENot* p)
   bufAppend(']');
   bufAppend(')');
 }
-=======
->>>>>>> 1be0693fca677c0da5896a2c68f9642a1a33355a
 void ShowAbsyn::visitEEq(EEq* p)
 {
   bufAppend('(');

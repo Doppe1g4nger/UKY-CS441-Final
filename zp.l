@@ -33,7 +33,6 @@ IDENT [a-zA-Z0-9'_]
 <YYINITIAL>";"      	 return _SYMB_4;
 <YYINITIAL>","      	 return _SYMB_5;
 <YYINITIAL>"="      	 return _SYMB_6;
-<<<<<<< HEAD
 <YYINITIAL>"&&"      	 return _SYMB_7;
 <YYINITIAL>"||"      	 return _SYMB_8;
 <YYINITIAL>"!"      	 return _SYMB_9;
@@ -55,26 +54,6 @@ IDENT [a-zA-Z0-9'_]
 <YYINITIAL>"return"      	 return _SYMB_25;
 <YYINITIAL>"until"      	 return _SYMB_26;
 <YYINITIAL>"while"      	 return _SYMB_27;
-=======
-<YYINITIAL>"=="      	 return _SYMB_7;
-<YYINITIAL>"!="      	 return _SYMB_8;
-<YYINITIAL>"<="      	 return _SYMB_9;
-<YYINITIAL>"<"      	 return _SYMB_10;
-<YYINITIAL>">="      	 return _SYMB_11;
-<YYINITIAL>">"      	 return _SYMB_12;
-<YYINITIAL>"+"      	 return _SYMB_13;
-<YYINITIAL>"-"      	 return _SYMB_14;
-<YYINITIAL>"*"      	 return _SYMB_15;
-<YYINITIAL>"double"      	 return _SYMB_16;
-<YYINITIAL>"else"      	 return _SYMB_17;
-<YYINITIAL>"for"      	 return _SYMB_18;
-<YYINITIAL>"if"      	 return _SYMB_19;
-<YYINITIAL>"int"      	 return _SYMB_20;
-<YYINITIAL>"repeat"      	 return _SYMB_21;
-<YYINITIAL>"return"      	 return _SYMB_22;
-<YYINITIAL>"until"      	 return _SYMB_23;
-<YYINITIAL>"while"      	 return _SYMB_24;
->>>>>>> 1be0693fca677c0da5896a2c68f9642a1a33355a
 
 <YYINITIAL>"//"[^\n]*\n  ++yy_mylinenumber ; 	 /* BNFC single-line comment */;
 <YYINITIAL>"/*"      	 BEGIN COMMENT;

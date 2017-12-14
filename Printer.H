@@ -57,12 +57,9 @@ void render(char* s);
   void visitVarDec(VarDec *p);
   void visitExp(Exp *p); /* abstract class */
   void visitEAss(EAss *p);
-<<<<<<< HEAD
   void visitEAnd(EAnd *p);
   void visitEOr(EOr *p);
   void visitENot(ENot *p);
-=======
->>>>>>> 1be0693fca677c0da5896a2c68f9642a1a33355a
   void visitEEq(EEq *p);
   void visitENEq(ENEq *p);
   void visitEEqLt(EEqLt *p);
@@ -182,12 +179,9 @@ class ShowAbsyn : public Visitor
   void visitVarDec(VarDec *p);
   void visitExp(Exp *p); /* abstract class */
   void visitEAss(EAss *p);
-<<<<<<< HEAD
   void visitEAnd(EAnd *p);
   void visitEOr(EOr *p);
   void visitENot(ENot *p);
-=======
->>>>>>> 1be0693fca677c0da5896a2c68f9642a1a33355a
   void visitEEq(EEq *p);
   void visitENEq(ENEq *p);
   void visitEEqLt(EEqLt *p);

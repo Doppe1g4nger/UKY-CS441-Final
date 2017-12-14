@@ -169,7 +169,6 @@ void Skeleton::visitEAss(EAss *eass)
 
 }
 
-<<<<<<< HEAD
 void Skeleton::visitEAnd(EAnd *eand)
 {
   /* Code For EAnd Goes Here */
@@ -196,8 +195,6 @@ void Skeleton::visitENot(ENot *enot)
 
 }
 
-=======
->>>>>>> 1be0693fca677c0da5896a2c68f9642a1a33355a
 void Skeleton::visitEEq(EEq *eeq)
 {
   /* Code For EEq Goes Here */

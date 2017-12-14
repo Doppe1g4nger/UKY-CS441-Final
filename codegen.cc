@@ -544,7 +544,7 @@ void CodeGen::visitListIdent(ListIdent* listident)
         // First local variable (numvars = funargs) has address 3, etc.
         // If this ListIdent is actually part of a parameter list, these
         // addresses will be fixed up by visitListDecl.
-        symbols.insert(Symbol(currid, currtype, -1, 3 + symbols.numvars() - funargs), TY_BAD);
+        symbols.insert(Symbol(currid, currtype, -1, 3 + symbols.numvars() - funargs, TY_BAD));
     }
 }
 
@@ -555,7 +555,7 @@ void CodeGen::visitVarDec(VarDec* vardec)
     {
         throw Redeclared(currid);
     }
-    symbols.insert(Symbol(currid, currtype, -1, 3 + symbols.numvars() - funargs), TY_BAD);
+    symbols.insert(Symbol(currid, currtype, -1, 3 + symbols.numvars() - funargs, TY_BAD));
 }
 
 void CodeGen::visitListExp(ListExp* listexp)
