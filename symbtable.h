@@ -29,7 +29,7 @@ class Symbol {
     public:
 	Symbol();
 //	Symbol(const std::string &name, type_t type = TY_BAD, int addr = -1);
-	Symbol(const std::string &name, type_t type = TY_BAD, int numargs = -1, int address = -1);
+	Symbol(const std::string &name, type_t type = TY_BAD, int numargs = -1, int address = -1, type_t argtype = TY_BAD);
 
 	// Accessors
 	virtual const std::string &name() const;
@@ -38,7 +38,11 @@ class Symbol {
 	virtual type_t &type();
 	virtual type_t type() const;
 
-	// Accessor and reference accessor for the type
+	// Accessor and reference accessor for the arg type
+	virtual type_t &argtype();
+	virtual type_t argtype() const;
+
+	// Accessor and reference accessor for the number of arguments
 	virtual int &numargs();
 	virtual int numargs() const;
 	virtual void setargs(int x);
@@ -57,6 +61,7 @@ class Symbol {
 	type_t typ;
 	int num;
 	int addr;
+	type_t argt;
 };
 
 

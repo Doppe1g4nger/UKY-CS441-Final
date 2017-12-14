@@ -140,9 +140,9 @@ messages from the compiler (see TESTS).
       int a, b = 5, c, d = 4, e;
       ```
 
-  * Add additional operators: >, >=, <=, !=
+  * Add additional operators: >, >=, <=, !=, ==
 
-	&&, ||, /, %, ==, !
+	&&, ||, /, %, !
 
 ### Developers' notes   --- ADJUST FOR YOUR SUBMISSION (JWJ)
 

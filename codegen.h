@@ -96,6 +96,9 @@ public:
     // Expressions
     void visitEAss(EAss *p);
     void visitEEq(EEq *p);
+    void visitEAnd(EAnd *p);
+    void visitEOr(EOr *p);
+    void visitENot(ENot *p);
     void visitENEq(ENEq *p);
     void visitELt(ELt *p);
     void visitEEqLt(EEqLt *p);

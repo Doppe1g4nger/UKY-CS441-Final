@@ -46,7 +46,7 @@ void CodeGen::visitGlobal(Global *global)
     if (symbols.exists(glob_name))//check that the var name does not already exist
         throw Redeclared(glob_name);
 
-    symbols.insert(Symbol(glob_name, TY_FUNC, -1, code.pos())); //insert into symbol table
+    symbols.insert(Symbol(glob_name, TY_FUNC, -1, code.pos(), TY_BAD)); //insert into symbol table
 
     code.add(I_PROG);	//I_PROG allocates global memory
     int patchloc = code.pos(); // to be filled with number of global variables.
@@ -74,7 +74,7 @@ void CodeGen::visitFun(Fun *fun)
     if (symbols.exists(fun_name))
         throw Redeclared(fun_name);
 
-    symbols.insert(Symbol(fun_name, TY_FUNC, funargs, code.pos()));
+    symbols.insert(Symbol(fun_name, TY_FUNC, funargs, code.pos(), TY_BAD));
 
 
     code.add(I_PROC);
@@ -87,7 +87,6 @@ void CodeGen::visitFun(Fun *fun)
     // Adds entries to symbol table, sets funargs
     fun->listdecl_->accept(this);
     int startvar = symbols.numvars();
-
 
     // Generate code for function body.
     fun->liststm_->accept(this);
@@ -283,6 +282,26 @@ void CodeGen::visitEAss(EAss *eass)
     code.add(I_VALUE);
 }
 
+void CodeGen::visitEAnd(EAnd *eand)
+{
+    eand->exp_1->accept(this);
+    eand->exp_2->accept(this);
+    code.add(I_AND);
+}
+
+void CodeGen::visitEOr(EOr *eor)
+{
+    eor->exp_1->accept(this);
+    eor->exp_2->accept(this);
+    code.add(I_OR);
+}
+
+void CodeGen::visitENot(ENot *enot)
+{
+    enot->exp_->accept(this);
+    code.add(I_NOT);
+}
+
 void CodeGen::visitEEq(EEq *eeq)
 {
     eeq->exp_1->accept(this);
@@ -294,8 +313,9 @@ void CodeGen::visitENEq(ENEq *eneq)
 {
     eneq->exp_1->accept(this);
     eneq->exp_2->accept(this);
-    code.add(I_NOT);
     code.add(I_EQUAL);
+    code.add(I_NOT);
+}
 
 void CodeGen::visitVarAss(VarAss *varass)
 {
@@ -322,7 +342,6 @@ void CodeGen::visitVarAss(VarAss *varass)
 
     // Dereference the address and return its value.
     code.add(I_VALUE);
-
 }
 
 void CodeGen::visitELt(ELt *elt)
@@ -336,8 +355,8 @@ void CodeGen::visitEEqLt(EEqLt *eeqlt)
 {
     eeqlt->exp_1->accept(this);
     eeqlt->exp_2->accept(this);
-    code.add(I_NOT);
     code.add(I_GREATER);
+    code.add(I_NOT);
 }
 
 void CodeGen::visitEGt(EGt *egt)
@@ -412,6 +431,19 @@ void CodeGen::visitCall(Call *call)
 		printf("%d\n", call->listexp_->size());
 	}
 
+    if(symbols[currid]->type()==TY_FUNC && symbols[currid]->numargs()!=-1){
+
+    //	if (symbols[currid]->type()!=TY_INT || symbols[currid]->type()!=TY_DOUBLE){
+    //		printf("meowwwww");
+    //		throw ArgError("A function does not have the appropriate tyoe of arguments!\n");
+    //		}
+
+	 if(symbols[currid]->type()!=currtype){
+		printf("meow2");
+    		throw ArgError("A function does not have the appropriate type of arguments!\n");
+		}
+	}
+
     code.add(I_CALL);
     code.add(level);
     code.add(addr);
@@ -483,9 +515,6 @@ void CodeGen::visitListDecl(ListDecl* listdecl)
     // ListDecl is a function parameter list, so we can compute funargs here.
     funargs = listdecl->size();
 
-    //if (symbols[currid]->numargs()!=listdecl->size())
-      //        throw ArgError("A function does not have the appropriate number of arguments!");
-
     int currarg = 0;
     for (ListDecl::iterator i = listdecl->begin() ; i != listdecl->end() ; ++i)
     {
@@ -511,7 +540,7 @@ void CodeGen::visitListIdent(ListIdent* listident)
         // First local variable (numvars = funargs) has address 3, etc.
         // If this ListIdent is actually part of a parameter list, these
         // addresses will be fixed up by visitListDecl.
-        symbols.insert(Symbol(currid, currtype, -1, 3 + symbols.numvars() - funargs));
+        symbols.insert(Symbol(currid, currtype, -1, 3 + symbols.numvars() - funargs), TY_BAD);
     }
 }
 
@@ -522,7 +551,7 @@ void CodeGen::visitVarDec(VarDec* vardec)
     {
         throw Redeclared(currid);
     }
-    symbols.insert(Symbol(currid, currtype, 3 + symbols.numvars() - funargs));
+    symbols.insert(Symbol(currid, currtype, -1, 3 + symbols.numvars() - funargs), TY_BAD);
 }
 
 void CodeGen::visitListExp(ListExp* listexp)

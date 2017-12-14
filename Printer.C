@@ -140,6 +140,20 @@ void PrintAbsyn::visitFun(Fun* p)
   _i_ = oldi;
 }
 
+void PrintAbsyn::visitGlobal(Global* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(_L_PAREN);
+
+  _i_ = 0; p->type_->accept(this);
+  visitIdent(p->ident_);
+  render(';');
+
+  if (oldi > 0) render(_R_PAREN);
+
+  _i_ = oldi;
+}
+
 void PrintAbsyn::visitDecl(Decl*p) {} //abstract class
 
 void PrintAbsyn::visitDecA(DecA* p)
@@ -393,6 +407,89 @@ void PrintAbsyn::visitEAss(EAss* p)
   _i_ = oldi;
 }
 
+void PrintAbsyn::visitEAnd(EAnd* p)
+{
+  int oldi = _i_;
+  if (oldi > 1) render(_L_PAREN);
+
+  _i_ = 2; p->exp_1->accept(this);
+  render("&&");
+  _i_ = 2; p->exp_2->accept(this);
+
+  if (oldi > 1) render(_R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitEOr(EOr* p)
+{
+  int oldi = _i_;
+  if (oldi > 1) render(_L_PAREN);
+
+  _i_ = 2; p->exp_1->accept(this);
+  render("||");
+  _i_ = 2; p->exp_2->accept(this);
+
+  if (oldi > 1) render(_R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitENot(ENot* p)
+{
+  int oldi = _i_;
+  if (oldi > 1) render(_L_PAREN);
+
+  render('!');
+  _i_ = 2; p->exp_->accept(this);
+
+  if (oldi > 1) render(_R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitEEq(EEq* p)
+{
+  int oldi = _i_;
+  if (oldi > 1) render(_L_PAREN);
+
+  _i_ = 2; p->exp_1->accept(this);
+  render("==");
+  _i_ = 2; p->exp_2->accept(this);
+
+  if (oldi > 1) render(_R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitENEq(ENEq* p)
+{
+  int oldi = _i_;
+  if (oldi > 1) render(_L_PAREN);
+
+  _i_ = 2; p->exp_1->accept(this);
+  render("!=");
+  _i_ = 2; p->exp_2->accept(this);
+
+  if (oldi > 1) render(_R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitEEqLt(EEqLt* p)
+{
+  int oldi = _i_;
+  if (oldi > 1) render(_L_PAREN);
+
+  _i_ = 2; p->exp_1->accept(this);
+  render("<=");
+  _i_ = 2; p->exp_2->accept(this);
+
+  if (oldi > 1) render(_R_PAREN);
+
+  _i_ = oldi;
+}
+
 void PrintAbsyn::visitELt(ELt* p)
 {
   int oldi = _i_;
@@ -400,6 +497,34 @@ void PrintAbsyn::visitELt(ELt* p)
 
   _i_ = 2; p->exp_1->accept(this);
   render('<');
+  _i_ = 2; p->exp_2->accept(this);
+
+  if (oldi > 1) render(_R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitEEqGt(EEqGt* p)
+{
+  int oldi = _i_;
+  if (oldi > 1) render(_L_PAREN);
+
+  _i_ = 2; p->exp_1->accept(this);
+  render(">=");
+  _i_ = 2; p->exp_2->accept(this);
+
+  if (oldi > 1) render(_R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitEGt(EGt* p)
+{
+  int oldi = _i_;
+  if (oldi > 1) render(_L_PAREN);
+
+  _i_ = 2; p->exp_1->accept(this);
+  render('>');
   _i_ = 2; p->exp_2->accept(this);
 
   if (oldi > 1) render(_R_PAREN);
@@ -621,6 +746,19 @@ void ShowAbsyn::visitFun(Fun* p)
   bufAppend('[');
   if (p->liststm_)  p->liststm_->accept(this);
   bufAppend(']');
+  bufAppend(' ');
+  bufAppend(')');
+}
+void ShowAbsyn::visitGlobal(Global* p)
+{
+  bufAppend('(');
+  bufAppend("Global");
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->type_)  p->type_->accept(this);
+  bufAppend(']');
+  bufAppend(' ');
+  visitIdent(p->ident_);
   bufAppend(' ');
   bufAppend(')');
 }
@@ -852,10 +990,90 @@ void ShowAbsyn::visitEAss(EAss* p)
   bufAppend(']');
   bufAppend(')');
 }
+void ShowAbsyn::visitEAnd(EAnd* p)
+{
+  bufAppend('(');
+  bufAppend("EAnd");
+  bufAppend(' ');
+  p->exp_1->accept(this);
+  bufAppend(' ');
+  p->exp_2->accept(this);
+  bufAppend(')');
+}
+void ShowAbsyn::visitEOr(EOr* p)
+{
+  bufAppend('(');
+  bufAppend("EOr");
+  bufAppend(' ');
+  p->exp_1->accept(this);
+  bufAppend(' ');
+  p->exp_2->accept(this);
+  bufAppend(')');
+}
+void ShowAbsyn::visitENot(ENot* p)
+{
+  bufAppend('(');
+  bufAppend("ENot");
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->exp_)  p->exp_->accept(this);
+  bufAppend(']');
+  bufAppend(')');
+}
+void ShowAbsyn::visitEEq(EEq* p)
+{
+  bufAppend('(');
+  bufAppend("EEq");
+  bufAppend(' ');
+  p->exp_1->accept(this);
+  bufAppend(' ');
+  p->exp_2->accept(this);
+  bufAppend(')');
+}
+void ShowAbsyn::visitENEq(ENEq* p)
+{
+  bufAppend('(');
+  bufAppend("ENEq");
+  bufAppend(' ');
+  p->exp_1->accept(this);
+  bufAppend(' ');
+  p->exp_2->accept(this);
+  bufAppend(')');
+}
+void ShowAbsyn::visitEEqLt(EEqLt* p)
+{
+  bufAppend('(');
+  bufAppend("EEqLt");
+  bufAppend(' ');
+  p->exp_1->accept(this);
+  bufAppend(' ');
+  p->exp_2->accept(this);
+  bufAppend(')');
+}
 void ShowAbsyn::visitELt(ELt* p)
 {
   bufAppend('(');
   bufAppend("ELt");
+  bufAppend(' ');
+  p->exp_1->accept(this);
+  bufAppend(' ');
+  p->exp_2->accept(this);
+  bufAppend(')');
+}
+void ShowAbsyn::visitEEqGt(EEqGt* p)
+{
+  bufAppend('(');
+  bufAppend("EEqGt");
+  bufAppend(' ');
+  p->exp_1->accept(this);
+  bufAppend(' ');
+  p->exp_2->accept(this);
+  bufAppend(')');
+}
+void ShowAbsyn::visitEGt(EGt* p)
+{
+  bufAppend('(');
+  bufAppend("EGt");
   bufAppend(' ');
   p->exp_1->accept(this);
   bufAppend(' ');

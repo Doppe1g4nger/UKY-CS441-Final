@@ -28,6 +28,7 @@ class Exp;
 class Type;
 class Prog;
 class Fun;
+class Global;
 class DecA;
 class SDecl;
 class SExp;
@@ -42,7 +43,15 @@ class SReturn;
 class VarAss;
 class VarDec;
 class EAss;
+class EAnd;
+class EOr;
+class ENot;
+class EEq;
+class ENEq;
+class EEqLt;
 class ELt;
+class EEqGt;
+class EGt;
 class EAdd;
 class ESub;
 class EMul;
@@ -75,6 +84,7 @@ public:
   virtual void visitType(Type *p) = 0;
   virtual void visitProg(Prog *p) = 0;
   virtual void visitFun(Fun *p) = 0;
+  virtual void visitGlobal(Global *p) = 0;
   virtual void visitDecA(DecA *p) = 0;
   virtual void visitSDecl(SDecl *p) = 0;
   virtual void visitSExp(SExp *p) = 0;
@@ -89,7 +99,15 @@ public:
   virtual void visitVarAss(VarAss *p) = 0;
   virtual void visitVarDec(VarDec *p) = 0;
   virtual void visitEAss(EAss *p) = 0;
+  virtual void visitEAnd(EAnd *p) = 0;
+  virtual void visitEOr(EOr *p) = 0;
+  virtual void visitENot(ENot *p) = 0;
+  virtual void visitEEq(EEq *p) = 0;
+  virtual void visitENEq(ENEq *p) = 0;
+  virtual void visitEEqLt(EEqLt *p) = 0;
   virtual void visitELt(ELt *p) = 0;
+  virtual void visitEEqGt(EEqGt *p) = 0;
+  virtual void visitEGt(EGt *p) = 0;
   virtual void visitEAdd(EAdd *p) = 0;
   virtual void visitESub(ESub *p) = 0;
   virtual void visitEMul(EMul *p) = 0;
@@ -207,6 +225,21 @@ public:
   virtual void accept(Visitor *v);
   virtual Fun *clone() const;
   void swap(Fun &);
+};
+
+class Global : public Function
+{
+public:
+  Type *type_;
+  Ident ident_;
+
+  Global(const Global &);
+  Global &operator=(const Global &);
+  Global(Type *p1, Ident p2);
+  ~Global();
+  virtual void accept(Visitor *v);
+  virtual Global *clone() const;
+  void swap(Global &);
 };
 
 class DecA : public Decl
@@ -418,6 +451,95 @@ public:
   void swap(EAss &);
 };
 
+class EAnd : public Exp
+{
+public:
+  Exp *exp_1;
+  Exp *exp_2;
+
+  EAnd(const EAnd &);
+  EAnd &operator=(const EAnd &);
+  EAnd(Exp *p1, Exp *p2);
+  ~EAnd();
+  virtual void accept(Visitor *v);
+  virtual EAnd *clone() const;
+  void swap(EAnd &);
+};
+
+class EOr : public Exp
+{
+public:
+  Exp *exp_1;
+  Exp *exp_2;
+
+  EOr(const EOr &);
+  EOr &operator=(const EOr &);
+  EOr(Exp *p1, Exp *p2);
+  ~EOr();
+  virtual void accept(Visitor *v);
+  virtual EOr *clone() const;
+  void swap(EOr &);
+};
+
+class ENot : public Exp
+{
+public:
+  Exp *exp_;
+
+  ENot(const ENot &);
+  ENot &operator=(const ENot &);
+  ENot(Exp *p1);
+  ~ENot();
+  virtual void accept(Visitor *v);
+  virtual ENot *clone() const;
+  void swap(ENot &);
+};
+
+class EEq : public Exp
+{
+public:
+  Exp *exp_1;
+  Exp *exp_2;
+
+  EEq(const EEq &);
+  EEq &operator=(const EEq &);
+  EEq(Exp *p1, Exp *p2);
+  ~EEq();
+  virtual void accept(Visitor *v);
+  virtual EEq *clone() const;
+  void swap(EEq &);
+};
+
+class ENEq : public Exp
+{
+public:
+  Exp *exp_1;
+  Exp *exp_2;
+
+  ENEq(const ENEq &);
+  ENEq &operator=(const ENEq &);
+  ENEq(Exp *p1, Exp *p2);
+  ~ENEq();
+  virtual void accept(Visitor *v);
+  virtual ENEq *clone() const;
+  void swap(ENEq &);
+};
+
+class EEqLt : public Exp
+{
+public:
+  Exp *exp_1;
+  Exp *exp_2;
+
+  EEqLt(const EEqLt &);
+  EEqLt &operator=(const EEqLt &);
+  EEqLt(Exp *p1, Exp *p2);
+  ~EEqLt();
+  virtual void accept(Visitor *v);
+  virtual EEqLt *clone() const;
+  void swap(EEqLt &);
+};
+
 class ELt : public Exp
 {
 public:
@@ -431,6 +553,36 @@ public:
   virtual void accept(Visitor *v);
   virtual ELt *clone() const;
   void swap(ELt &);
+};
+
+class EEqGt : public Exp
+{
+public:
+  Exp *exp_1;
+  Exp *exp_2;
+
+  EEqGt(const EEqGt &);
+  EEqGt &operator=(const EEqGt &);
+  EEqGt(Exp *p1, Exp *p2);
+  ~EEqGt();
+  virtual void accept(Visitor *v);
+  virtual EEqGt *clone() const;
+  void swap(EEqGt &);
+};
+
+class EGt : public Exp
+{
+public:
+  Exp *exp_1;
+  Exp *exp_2;
+
+  EGt(const EGt &);
+  EGt &operator=(const EGt &);
+  EGt(Exp *p1, Exp *p2);
+  ~EGt();
+  virtual void accept(Visitor *v);
+  virtual EGt *clone() const;
+  void swap(EGt &);
 };
 
 class EAdd : public Exp

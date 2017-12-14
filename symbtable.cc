@@ -8,8 +8,8 @@ Symbol::Symbol()
 	: nam(), typ(TY_BAD)
 {}
 
-Symbol::Symbol(const string &name, type_t type, int numargs, int address)
-	: nam(name), typ(type), num(numargs), addr(address)
+Symbol::Symbol(const string &name, type_t type, int numargs, int address, type_t argtype)
+	: nam(name), typ(type), num(numargs), addr(address), argt(argtype)
 {}
 
 //Symbol::Symbol(const string &name, type_t type, int address)
@@ -29,6 +29,16 @@ type_t &Symbol::type()
 type_t Symbol::type() const
 {
 	return typ;
+}
+
+type_t &Symbol::argtype()
+{
+	return argt;
+}
+
+type_t Symbol::argtype() const
+{
+	return argt;
 }
 
 int &Symbol::numargs()
