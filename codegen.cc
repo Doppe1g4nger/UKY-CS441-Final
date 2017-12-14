@@ -245,10 +245,10 @@ void CodeGen::visitSReturn(SReturn *sreturn)
     code.add(-(funargs+1));
     //code.add(I_SWAP);
     sreturn->exp_->accept(this); // Evaluate expression after variable assignment to avoid swap
-    if (fun_type != currtype)
-    {
-        throw TypeError(currid);
-    }
+//    if (fun_type != currtype)
+//    {
+//        throw TypeError(currid);
+//    }
     code.add(I_ASSIGN);
     code.add(1);
 
@@ -420,9 +420,8 @@ void CodeGen::visitCall(Call *call)
 
     if(symbols[currid]->type()==TY_FUNC && symbols[currid]->numargs()!=-1){
    	if (symbols[currid]->numargs()!=call->listexp_->size()){
-		printf("MEOWWW\n");
-    		//throw ArgError("A function does not have the appropriate number of arguments!\n");
-		//printf("%s\n", symbols[currid]->name());
+		//printf("MEOWWW\n");
+    		throw ArgError("A function does not have the appropriate number of arguments!\n");
 		}
 		printf("HEY DUMBASS HERE IS YOUR FIRST THING\n");
 		printf("%d\n", symbols[currid]->numargs());
