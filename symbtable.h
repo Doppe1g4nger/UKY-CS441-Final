@@ -21,7 +21,8 @@ enum type_t {
 	TY_BAD,
 	TY_INT,
 	TY_DOUBLE,
-	TY_FUNC
+	TY_FUNC,
+	TY_GLOB
 };
 
 // The values in a SymbolTable; accessed by string keys.

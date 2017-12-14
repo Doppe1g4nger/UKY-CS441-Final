@@ -46,7 +46,7 @@ void CodeGen::visitGlobal(Global *global)
     if (symbols.exists(glob_name))//check that the var name does not already exist
         throw Redeclared(glob_name);
 
-    symbols.insert(Symbol(glob_name, TY_FUNC, -1, code.pos(), TY_BAD)); //insert into symbol table
+    symbols.insert(Symbol(glob_name, TY_GLOB, -1, code.pos(), TY_BAD)); //insert into symbol table
 
     code.add(I_PROG);	//I_PROG allocates global memory
     int patchloc = code.pos(); // to be filled with number of global variables.
@@ -66,13 +66,14 @@ void CodeGen::visitGlobal(Global *global)
 void CodeGen::visitFun(Fun *fun)
 {
     fun->type_->accept(this); //sets currtype
-    
+    fun_type = currtype;
+
+
     // return type in currtype, but currently ignored (always int)
     visitIdent(fun->ident_);
     Ident fun_name = currid;
-    currfun=currid;
-    fun_type = currtype;
-
+    currfun = currid;
+    
     if (symbols.exists(fun_name))
         throw Redeclared(fun_name);
 
@@ -245,10 +246,15 @@ void CodeGen::visitSReturn(SReturn *sreturn)
     code.add(-(funargs+1));
     //code.add(I_SWAP);
     sreturn->exp_->accept(this); // Evaluate expression after variable assignment to avoid swap
-//    if (fun_type != currtype)
-//    {
-//        throw TypeError(currid);
-//    }
+    if (fun_type != currtype)
+    {
+        throw TypeError(currid);
+    }
+    if (fun_type != currtype)
+    {
+        throw TypeError(currid);
+    }
+
     code.add(I_ASSIGN);
     code.add(1);
 
@@ -402,7 +408,7 @@ void CodeGen::visitCall(Call *call)
     if (!symbols.exists(currid))
         throw UnknownFunc(currid);
 
-    currfun=currid;
+    currfun = currid;
 
     //printf("Symbol name: %s\n", symbols[currid]->name());
 
@@ -420,13 +426,8 @@ void CodeGen::visitCall(Call *call)
 
     if(symbols[currid]->type()==TY_FUNC && symbols[currid]->numargs()!=-1){
    	if (symbols[currid]->numargs()!=call->listexp_->size()){
-		//printf("MEOWWW\n");
     		throw ArgError("A function does not have the appropriate number of arguments!\n");
 		}
-		printf("HEY DUMBASS HERE IS YOUR FIRST THING\n");
-		printf("%d\n", symbols[currid]->numargs());
-		printf("HEY DUMBASS HERE IS YOUR SECOND THING\n");
-		printf("%d\n", call->listexp_->size());
 	}
 
 
@@ -442,6 +443,8 @@ void CodeGen::visitEVar(EVar *evar)
     visitIdent(evar->ident_); // sets currid
     if (!symbols.exists(currid))
         throw UnknownVar(currid);
+
+	currtype=symbols[currid]->type();
 
     // Compute the address.
     code.add(I_VARIABLE);
@@ -548,21 +551,26 @@ void CodeGen::visitListExp(ListExp* listexp)
     {
         (*i)->accept(this);
 
-    if(symbols[currfun]->type()==TY_FUNC && symbols[currfun]->numargs()!=-1){
+    if(symbols[currfun]->type()==TY_FUNC && symbols[currfun]->numargs()!=-1 &&currtype!=TY_GLOB){
 
-	//if(symbols[currfun]->argtype()==TY_BAD)
-	//	printf("THE CURRFUN TYPE IS BAD \n");
-	//if(symbols[currfun]->argtype()==TY_INT)
-	//	printf("THE CURRFUN TYPE IS INT \n");
-	//if(symbols[currfun]->argtype()==TY_DOUBLE)
-	//	printf("THE CURRFUN TYPE IS DOUBLE \n");
+//        if(symbols[currfun]->argtype()==TY_BAD)
+  //            printf("THE CURRFUN TYPE IS BAD \n");
+    //    if(symbols[currfun]->argtype()==TY_INT)
+      //        printf("THE CURRFUN TYPE IS INT \n");
+        //if(symbols[currfun]->argtype()==TY_DOUBLE)
+          //    printf("THE CURRFUN TYPE IS DOUBLE \n");
 
-	//if(currtype==TY_BAD)
-	//	printf("THE expression TYPE IS BAD \n");
-	//if(currtype==TY_INT)
-	//	printf("THE expression TYPE IS INT \n");
-	//if(currtype==TY_DOUBLE)
-	//	printf("THE expression TYPE IS DOUBLE \n");
+        //if(currtype==TY_BAD)
+          //    printf("THE expression TYPE IS BAD \n");
+        //if(currtype==TY_GLOB)
+          //    printf("THE expression TYPE IS GLOBAL \n");
+        //if(currtype==TY_FUNC)
+          //    printf("THE expression TYPE IS FUNC \n");
+        //if(currtype==TY_INT)
+          //    printf("THE expression TYPE IS INT \n");
+        //if(currtype==TY_DOUBLE)
+          //    printf("THE expression TYPE IS DOUBLE \n");
+
 
 	 if(symbols[currfun]->argtype()!=currtype){
     		throw ArgError("A function does not have the appropriate type of arguments!\n");
@@ -584,6 +592,7 @@ void CodeGen::visitListVar(ListVar* listvar)
 void CodeGen::visitInteger(Integer x)
 {
     code.add(I_CONSTANT);
+	currtype=TY_INT;
     code.add(x);
 }
 
@@ -596,6 +605,7 @@ void CodeGen::visitChar(Char x)
 void CodeGen::visitDouble(Double x)
 {
     code.add(R_CONSTANT);
+	currtype=TY_DOUBLE;
     code.add(x);
 }
 

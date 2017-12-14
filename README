@@ -37,18 +37,6 @@ run with:
 
 `./test-zp2pstack-modified.sh myTESTS`
 
-TESTS: please deliver on the expectations listed below
-
-Include in myTests directory: one group of tests for each feature.
-For each goal in the project, include two tests: basic and advanced.
-Additionally, include test programs that are incorrect zp, to demonstrate how errors are reported.
-Add one larger and more realistic zp program.
-
-Note: The tests are run through script included in the handout.
-Synopsis for testing zp files in TESTS: test-zp2pstack-modified.sh myTESTS
-Note that this script requires additional files for each program: listing the expected results, and possible
-messages from the compiler (see TESTS).
-
 ### Files
 
   * Makefile.codegen
@@ -122,9 +110,9 @@ messages from the compiler (see TESTS).
 
   * repeat-until-loop: **Complete**
 
-  * Scoped for-loop: *In-Progress*
+  * Scoped for-loop: *Complete*
 
-  * Argument count checking: **In-Progress**
+  * Argument count checking: **Complete**
 
   * Type checking: *Complete*
 
@@ -132,24 +120,24 @@ messages from the compiler (see TESTS).
 
 #### Additional features   --- ADJUST FOR YOUR SUBMISSION (JWJ)
 
-  * C-style declaration/assignment-on-declaration lists.
-
-      * Example:
-
-      ```c
-      int a, b = 5, c, d = 4, e;
-      ```
-
-  * Add additional operators: >, >=, <=, !=, ==, &&, ||, !
-
-	 /, %
+  * Added additional operators: >, >=, <=, !=, ==, &&, ||, !
 
 ### Developers' notes   --- ADJUST FOR YOUR SUBMISSION (JWJ)
 
-Describe the basic ideas of your implementation for above features, focusing on
-interesting solutions, difficulties, important design decisions, etc.
+We were pretty stumped with the implementation of the argument type checking. We took a two-pronged approach of
+ensuring that the return type matched the type of the variable that was actually returned (this was implemented in
+SReturn) and also ensuring that the parameter types matched. This also meant that we included another global variable
+in the symbol table that kept track of the parameter type that was expected. We decided that the easiest place to put 
+the argument type check for these parameters was within the listdecl function itself, because that is where we had
+easy access to each identifier that the program read. Othewise, there are not many bells and whistles; however, we did
+implement all the required functions and they work except extreme edge cases for nested for loops and arg checking 
+(see Known Bugs).
 
 ### Known bugs   --- ADJUST FOR YOUR SUBMISSION (JWJ)
 
-  * bug 1
-  * bug 2, etc. -- BE SPECIFIC (JWJ)
+  * nested scoped for loop:
+	scoped for loops do not support nested loops, only while and non-scoped for loops support nested ifs,
+	scoped for loops also do not fully shield scoped variable assignments from outside assignments
+  * argument checking:
+	does not always work for functions within functions if the parameters of the inside function do not match 
+	those of the outside function
