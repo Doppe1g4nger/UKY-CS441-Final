@@ -296,6 +296,7 @@ void CodeGen::visitENEq(ENEq *eneq)
     eneq->exp_2->accept(this);
     code.add(I_NOT);
     code.add(I_EQUAL);
+}
 
 void CodeGen::visitVarAss(VarAss *varass)
 {

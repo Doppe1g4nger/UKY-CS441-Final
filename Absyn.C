@@ -104,6 +104,53 @@ Fun *Fun::clone() const
 
 
 
+/********************   Global    ********************/
+Global::Global(Type *p1, Ident p2)
+{
+  type_ = p1;
+  ident_ = p2;
+
+}
+
+Global::Global(const Global & other)
+{
+  type_ = other.type_->clone();
+  ident_ = other.ident_;
+
+}
+
+Global &Global::operator=(const Global & other)
+{
+  Global tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void Global::swap(Global & other)
+{
+  std::swap(type_, other.type_);
+  std::swap(ident_, other.ident_);
+
+}
+
+Global::~Global()
+{
+  delete(type_);
+
+}
+
+void Global::accept(Visitor *v)
+{
+  v->visitGlobal(this);
+}
+
+Global *Global::clone() const
+{
+  return new Global(*this);
+}
+
+
+
 /********************   DecA    ********************/
 DecA::DecA(Type *p1, ListVar *p2)
 {
@@ -769,6 +816,150 @@ EAss *EAss::clone() const
 
 
 
+/********************   EEq    ********************/
+EEq::EEq(Exp *p1, Exp *p2)
+{
+  exp_1 = p1;
+  exp_2 = p2;
+
+}
+
+EEq::EEq(const EEq & other)
+{
+  exp_1 = other.exp_1->clone();
+  exp_2 = other.exp_2->clone();
+
+}
+
+EEq &EEq::operator=(const EEq & other)
+{
+  EEq tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void EEq::swap(EEq & other)
+{
+  std::swap(exp_1, other.exp_1);
+  std::swap(exp_2, other.exp_2);
+
+}
+
+EEq::~EEq()
+{
+  delete(exp_1);
+  delete(exp_2);
+
+}
+
+void EEq::accept(Visitor *v)
+{
+  v->visitEEq(this);
+}
+
+EEq *EEq::clone() const
+{
+  return new EEq(*this);
+}
+
+
+
+/********************   ENEq    ********************/
+ENEq::ENEq(Exp *p1, Exp *p2)
+{
+  exp_1 = p1;
+  exp_2 = p2;
+
+}
+
+ENEq::ENEq(const ENEq & other)
+{
+  exp_1 = other.exp_1->clone();
+  exp_2 = other.exp_2->clone();
+
+}
+
+ENEq &ENEq::operator=(const ENEq & other)
+{
+  ENEq tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void ENEq::swap(ENEq & other)
+{
+  std::swap(exp_1, other.exp_1);
+  std::swap(exp_2, other.exp_2);
+
+}
+
+ENEq::~ENEq()
+{
+  delete(exp_1);
+  delete(exp_2);
+
+}
+
+void ENEq::accept(Visitor *v)
+{
+  v->visitENEq(this);
+}
+
+ENEq *ENEq::clone() const
+{
+  return new ENEq(*this);
+}
+
+
+
+/********************   EEqLt    ********************/
+EEqLt::EEqLt(Exp *p1, Exp *p2)
+{
+  exp_1 = p1;
+  exp_2 = p2;
+
+}
+
+EEqLt::EEqLt(const EEqLt & other)
+{
+  exp_1 = other.exp_1->clone();
+  exp_2 = other.exp_2->clone();
+
+}
+
+EEqLt &EEqLt::operator=(const EEqLt & other)
+{
+  EEqLt tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void EEqLt::swap(EEqLt & other)
+{
+  std::swap(exp_1, other.exp_1);
+  std::swap(exp_2, other.exp_2);
+
+}
+
+EEqLt::~EEqLt()
+{
+  delete(exp_1);
+  delete(exp_2);
+
+}
+
+void EEqLt::accept(Visitor *v)
+{
+  v->visitEEqLt(this);
+}
+
+EEqLt *EEqLt::clone() const
+{
+  return new EEqLt(*this);
+}
+
+
+
 /********************   ELt    ********************/
 ELt::ELt(Exp *p1, Exp *p2)
 {
@@ -813,6 +1004,102 @@ void ELt::accept(Visitor *v)
 ELt *ELt::clone() const
 {
   return new ELt(*this);
+}
+
+
+
+/********************   EEqGt    ********************/
+EEqGt::EEqGt(Exp *p1, Exp *p2)
+{
+  exp_1 = p1;
+  exp_2 = p2;
+
+}
+
+EEqGt::EEqGt(const EEqGt & other)
+{
+  exp_1 = other.exp_1->clone();
+  exp_2 = other.exp_2->clone();
+
+}
+
+EEqGt &EEqGt::operator=(const EEqGt & other)
+{
+  EEqGt tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void EEqGt::swap(EEqGt & other)
+{
+  std::swap(exp_1, other.exp_1);
+  std::swap(exp_2, other.exp_2);
+
+}
+
+EEqGt::~EEqGt()
+{
+  delete(exp_1);
+  delete(exp_2);
+
+}
+
+void EEqGt::accept(Visitor *v)
+{
+  v->visitEEqGt(this);
+}
+
+EEqGt *EEqGt::clone() const
+{
+  return new EEqGt(*this);
+}
+
+
+
+/********************   EGt    ********************/
+EGt::EGt(Exp *p1, Exp *p2)
+{
+  exp_1 = p1;
+  exp_2 = p2;
+
+}
+
+EGt::EGt(const EGt & other)
+{
+  exp_1 = other.exp_1->clone();
+  exp_2 = other.exp_2->clone();
+
+}
+
+EGt &EGt::operator=(const EGt & other)
+{
+  EGt tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void EGt::swap(EGt & other)
+{
+  std::swap(exp_1, other.exp_1);
+  std::swap(exp_2, other.exp_2);
+
+}
+
+EGt::~EGt()
+{
+  delete(exp_1);
+  delete(exp_2);
+
+}
+
+void EGt::accept(Visitor *v)
+{
+  v->visitEGt(this);
+}
+
+EGt *EGt::clone() const
+{
+  return new EGt(*this);
 }
 
 

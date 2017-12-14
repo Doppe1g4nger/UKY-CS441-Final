@@ -90,10 +90,15 @@ Type* pType(const char *str);
 #define _SYMB_17 276
 #define _SYMB_18 277
 #define _SYMB_19 278
-#define _STRING_ 279
-#define _INTEGER_ 280
-#define _DOUBLE_ 281
-#define _IDENT_ 282
+#define _SYMB_20 279
+#define _SYMB_21 280
+#define _SYMB_22 281
+#define _SYMB_23 282
+#define _SYMB_24 283
+#define _STRING_ 284
+#define _INTEGER_ 285
+#define _DOUBLE_ 286
+#define _IDENT_ 287
 
 extern YYSTYPE yylval;
 

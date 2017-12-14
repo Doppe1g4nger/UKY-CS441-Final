@@ -17,6 +17,7 @@ public:
   void visitType(Type* p);
   void visitProg(Prog* p);
   void visitFun(Fun* p);
+  void visitGlobal(Global* p);
   void visitDecA(DecA* p);
   void visitSDecl(SDecl* p);
   void visitSExp(SExp* p);
@@ -31,7 +32,12 @@ public:
   void visitVarAss(VarAss* p);
   void visitVarDec(VarDec* p);
   void visitEAss(EAss* p);
+  void visitEEq(EEq* p);
+  void visitENEq(ENEq* p);
+  void visitEEqLt(EEqLt* p);
   void visitELt(ELt* p);
+  void visitEEqGt(EEqGt* p);
+  void visitEGt(EGt* p);
   void visitEAdd(EAdd* p);
   void visitESub(ESub* p);
   void visitEMul(EMul* p);

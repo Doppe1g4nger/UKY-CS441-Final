@@ -33,6 +33,7 @@ void render(char* s);
   void visitProg(Prog *p);
   void visitFunction(Function *p); /* abstract class */
   void visitFun(Fun *p);
+  void visitGlobal(Global *p);
   void visitDecl(Decl *p); /* abstract class */
   void visitDecA(DecA *p);
   void visitListVar(ListVar* p);
@@ -56,7 +57,12 @@ void render(char* s);
   void visitVarDec(VarDec *p);
   void visitExp(Exp *p); /* abstract class */
   void visitEAss(EAss *p);
+  void visitEEq(EEq *p);
+  void visitENEq(ENEq *p);
+  void visitEEqLt(EEqLt *p);
   void visitELt(ELt *p);
+  void visitEEqGt(EEqGt *p);
+  void visitEGt(EGt *p);
   void visitEAdd(EAdd *p);
   void visitESub(ESub *p);
   void visitEMul(EMul *p);
@@ -146,6 +152,7 @@ class ShowAbsyn : public Visitor
   void visitProg(Prog *p);
   void visitFunction(Function *p); /* abstract class */
   void visitFun(Fun *p);
+  void visitGlobal(Global *p);
   void visitDecl(Decl *p); /* abstract class */
   void visitDecA(DecA *p);
   void visitListVar(ListVar* p);
@@ -169,7 +176,12 @@ class ShowAbsyn : public Visitor
   void visitVarDec(VarDec *p);
   void visitExp(Exp *p); /* abstract class */
   void visitEAss(EAss *p);
+  void visitEEq(EEq *p);
+  void visitENEq(ENEq *p);
+  void visitEEqLt(EEqLt *p);
   void visitELt(ELt *p);
+  void visitEEqGt(EEqGt *p);
+  void visitEGt(EGt *p);
   void visitEAdd(EAdd *p);
   void visitESub(ESub *p);
   void visitEMul(EMul *p);

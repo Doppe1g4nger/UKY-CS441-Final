@@ -35,6 +35,15 @@ void Skeleton::visitFun(Fun *fun)
 
 }
 
+void Skeleton::visitGlobal(Global *global)
+{
+  /* Code For Global Goes Here */
+
+  global->type_->accept(this);
+  visitIdent(global->ident_);
+
+}
+
 void Skeleton::visitDecA(DecA *deca)
 {
   /* Code For DecA Goes Here */
@@ -160,12 +169,57 @@ void Skeleton::visitEAss(EAss *eass)
 
 }
 
+void Skeleton::visitEEq(EEq *eeq)
+{
+  /* Code For EEq Goes Here */
+
+  eeq->exp_1->accept(this);
+  eeq->exp_2->accept(this);
+
+}
+
+void Skeleton::visitENEq(ENEq *eneq)
+{
+  /* Code For ENEq Goes Here */
+
+  eneq->exp_1->accept(this);
+  eneq->exp_2->accept(this);
+
+}
+
+void Skeleton::visitEEqLt(EEqLt *eeqlt)
+{
+  /* Code For EEqLt Goes Here */
+
+  eeqlt->exp_1->accept(this);
+  eeqlt->exp_2->accept(this);
+
+}
+
 void Skeleton::visitELt(ELt *elt)
 {
   /* Code For ELt Goes Here */
 
   elt->exp_1->accept(this);
   elt->exp_2->accept(this);
+
+}
+
+void Skeleton::visitEEqGt(EEqGt *eeqgt)
+{
+  /* Code For EEqGt Goes Here */
+
+  eeqgt->exp_1->accept(this);
+  eeqgt->exp_2->accept(this);
+
+}
+
+void Skeleton::visitEGt(EGt *egt)
+{
+  /* Code For EGt Goes Here */
+
+  egt->exp_1->accept(this);
+  egt->exp_2->accept(this);
 
 }
 
