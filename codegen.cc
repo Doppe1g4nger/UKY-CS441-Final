@@ -46,7 +46,7 @@ void CodeGen::visitGlobal(Global *global)
     if (symbols.exists(glob_name))//check that the var name does not already exist
         throw Redeclared(glob_name);
 
-    symbols.insert(Symbol(glob_name, TY_GLOB, -1, code.pos(), TY_BAD)); //insert into symbol table
+    symbols.insert(Symbol(glob_name, currtype, -1, code.pos(), TY_BAD)); //insert into symbol table
 
     code.add(I_PROG);	//I_PROG allocates global memory
     int patchloc = code.pos(); // to be filled with number of global variables.
@@ -168,6 +168,7 @@ void CodeGen::visitSFor(SFor *sfor)
     code.add(looploc - (code.pos() - 1)); // offset to looploc
     code.at(patchloc) = code.pos() - (patchloc - 1);
 }
+
 void CodeGen::visitSFor3(SFor3 *sfor)
 {
     /*code.add(I_CALL);
@@ -551,7 +552,7 @@ void CodeGen::visitListExp(ListExp* listexp)
     {
         (*i)->accept(this);
 
-    if(symbols[currfun]->type()==TY_FUNC && symbols[currfun]->numargs()!=-1 &&currtype!=TY_GLOB){
+    if(symbols[currfun]->type()==TY_FUNC && symbols[currfun]->numargs()!=-1){
 
 //        if(symbols[currfun]->argtype()==TY_BAD)
   //            printf("THE CURRFUN TYPE IS BAD \n");
