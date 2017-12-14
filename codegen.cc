@@ -66,13 +66,14 @@ void CodeGen::visitGlobal(Global *global)
 void CodeGen::visitFun(Fun *fun)
 {
     fun->type_->accept(this); //sets currtype
-    
+    fun_type = currtype;
+
+
     // return type in currtype, but currently ignored (always int)
     visitIdent(fun->ident_);
     Ident fun_name = currid;
-    currfun=currid;
-    fun_type = currtype;
-
+    currfun = currid;
+    
     if (symbols.exists(fun_name))
         throw Redeclared(fun_name);
 
@@ -247,6 +248,19 @@ void CodeGen::visitSReturn(SReturn *sreturn)
     sreturn->exp_->accept(this); // Evaluate expression after variable assignment to avoid swap
     if (fun_type != currtype)
     {
+
+	if(fun_type==TY_BAD)
+		printf("THE CURRFUN TYPE IS BAD \n");
+	if(fun_type==TY_INT)
+		printf("THE CURRFUN TYPE IS INT \n");
+	if(fun_type==TY_DOUBLE)
+		printf("THE CURRFUN TYPE IS DOUBLE \n");
+	if(currtype==TY_BAD)
+		printf("THE expression TYPE IS BAD \n");
+	if(currtype==TY_INT)
+		printf("THE expression TYPE IS INT \n");
+	if(currtype==TY_DOUBLE)
+		printf("THE expression TYPE IS DOUBLE \n");
         throw TypeError(currid);
     }
     code.add(I_ASSIGN);
@@ -402,7 +416,7 @@ void CodeGen::visitCall(Call *call)
     if (!symbols.exists(currid))
         throw UnknownFunc(currid);
 
-    currfun=currid;
+    currfun = currid;
 
     //printf("Symbol name: %s\n", symbols[currid]->name());
 
@@ -420,14 +434,9 @@ void CodeGen::visitCall(Call *call)
 
     if(symbols[currid]->type()==TY_FUNC && symbols[currid]->numargs()!=-1){
    	if (symbols[currid]->numargs()!=call->listexp_->size()){
-		printf("MEOWWW\n");
-    		//throw ArgError("A function does not have the appropriate number of arguments!\n");
-		//printf("%s\n", symbols[currid]->name());
+    		throw ArgError("A function does not have the appropriate number of arguments!\n");
+		printf("%s\n", symbols[currid]->name());
 		}
-		printf("HEY DUMBASS HERE IS YOUR FIRST THING\n");
-		printf("%d\n", symbols[currid]->numargs());
-		printf("HEY DUMBASS HERE IS YOUR SECOND THING\n");
-		printf("%d\n", call->listexp_->size());
 	}
 
 
